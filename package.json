@@ -1,0 +1,21 @@
+{
+  "name": "cc-programs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "push": "tsx ./tools/push.ts",
+    "cclink": "tsx ./tools/establish-links.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chmodr": "^1.2.0",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0"
+  }
+}

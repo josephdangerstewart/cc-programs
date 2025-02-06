@@ -18,9 +18,7 @@ for (const project of projects) {
 		continue;
 	}
 
-	const { targets } = JSON.parse(
-		fs.readFileSync(targetsJsonPath, { encoding: "utf-8" })
-	);
+	const { targets } = readConfig(project, 'targets.json');
 
 	if (!Array.isArray(targets)) {
 		throw new Error("Invalid contents");
@@ -33,15 +31,7 @@ for (const project of projects) {
 }
 
 function pushDependencies(project: string, target: string) {
-	const configJsonPath = path.join(projectsRoot, project, 'config.json');
-
-	if (!fs.existsSync(configJsonPath)) {
-		return;
-	}
-
-	const { dependencies } = JSON.parse(
-		fs.readFileSync(configJsonPath, { encoding: 'utf-8' })
-	);
+	const { dependencies } = readConfig(project);
 
 	if (!Array.isArray(dependencies)) {
 		return;
@@ -60,9 +50,11 @@ function pushDependencies(project: string, target: string) {
 }
 
 function copyProject(project: string, target: string) {
+	const { topLevel = false } = readConfig(project);
+
 	const projectPath = path.join(projectsRoot, project);
 	const targetsJsonPath = path.join(projectPath, 'targets.json');
-	const targetPath = path.join(target, project);
+	const targetPath = path.join(target, topLevel ? '' : project);
 
 	if (!fs.existsSync(projectPath)) {
 		console.error(`tried to push invalid project: ${project}`);
@@ -95,4 +87,40 @@ function copyProject(project: string, target: string) {
 			return true;
 		},
 	});
+
+	writeEntry(project, target);
 }
+
+function writeEntry(project: string, target: string) {
+	let { entry } = readConfig(project);
+
+	if (!entry) {
+		return;
+	}
+
+	if (entry === true) {
+		entry = {}
+	}
+
+	const { runs = 'main', fileName = project } = entry;
+
+	if (!fs.existsSync(path.join(target, project, `${runs}.lua`)) || !fileName) {
+		console.error(`invalid entry config for project ${project}`);
+		return;
+	}
+
+	const contents = `require("${project}.${runs}")`;
+	fs.writeFileSync(path.join(target, `${fileName}.lua`), contents, { encoding: 'utf-8' });
+}
+
+function readConfig(project: string, file = 'config.json', defaultValue: any = {}): any {
+	const configPath = path.join(projectsRoot, project, file);
+	if (!fs.existsSync(configPath)) {
+		return defaultValue;
+	}
+	
+	return JSON.parse(
+		fs.readFileSync(configPath, { encoding: "utf-8" })
+	);
+}
+

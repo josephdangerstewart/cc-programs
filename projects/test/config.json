@@ -1,5 +1,7 @@
 {
 	"dependencies": [
-		"rtp"
-	]
+		"rtp",
+		"lib"
+	],
+	"entry": true
 }

@@ -41,13 +41,13 @@ function FrameControllerBase:__index(key)
 	local _self = self
 	if (stringUtil.startsWith(key, "add") or key == "removeObject") and contentFrame[key] then
 		return function(firstParam, ...)
-			return contentFrame[key](contentFrame, unpack(arg))
+			return contentFrame[key](contentFrame, ...)
 		end
 	end
 
 	if type(contentFrame[key]) == "function" then
 		return function(firstParam, ...)
-			local result = contentFrame[key](contentFrame, unpack(arg))
+			local result = contentFrame[key](contentFrame, ...)
 			if result == contentFrame then
 				return _self
 			end

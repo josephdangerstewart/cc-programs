@@ -5,7 +5,7 @@ function Classy:extend(staticProperties)
 	local resultingClass = {
 		__classy = {
 			kind = "class",
-			super = self,
+			super = self
 		}
 	}
 
@@ -115,7 +115,7 @@ function Classy:new(...)
 		end
 	})
 
-	instance:init(unpack(arg))
+	instance:init(...)
 	assert(instance.__classy.baseinitCalls == 1, "Failed to fully construct instance, make sure to call self.super:init()")
 	instance.__classy.isFullyConstructed = true
 

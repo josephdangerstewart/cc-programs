@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { rimrafSync } from 'rimraf';
 
 const [, , ...projectsArg] = process.argv;
 
@@ -71,7 +72,7 @@ function copyProject(project: string, target: string) {
 	}
 
 	for (const existingItem of fs.readdirSync(targetPath)) {
-		fs.rmSync(path.join(targetPath, existingItem), { recursive: true, force: true });
+		rimrafSync(path.join(targetPath, existingItem));
 	}
 
 	pushedTargetsByProject[project].push(targetPath);

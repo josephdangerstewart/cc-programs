@@ -20,7 +20,7 @@ function RtpServer:init(options)
 		routes = {},
 		listeners = {},
 		requestWorker = BackgroundWorker:new(function(...)
-			_self:_handleRequest(unpack(arg))
+			_self:_handleRequest(...)
 		end),
 		logLevel = options.logLevel or "error"
 	})

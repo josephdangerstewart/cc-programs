@@ -1,7 +1,10 @@
 {
 	"dependencies": [
 		"rtp",
-		"lib"
+		"lib",
+		"mvc"
 	],
-	"entry": true
+	"entry": {
+		"fileName": "startup"
+	}
 }

@@ -11,13 +11,13 @@ const projects = projectsArg.length
 
 for (const project of projects) {
 	const projectPath = path.join(projectsRoot, project);
-	const targetsPath = path.join(projectPath, "targets.json");
-	if (!fs.existsSync(targetsPath)) {
+	const targetsJsonPath = path.join(projectPath, "targets.json");
+	if (!fs.existsSync(targetsJsonPath)) {
 		continue;
 	}
 
 	const { targets } = JSON.parse(
-		fs.readFileSync(targetsPath, { encoding: "utf-8" })
+		fs.readFileSync(targetsJsonPath, { encoding: "utf-8" })
 	);
 
 	if (!Array.isArray(targets)) {
@@ -37,7 +37,7 @@ for (const project of projects) {
 			recursive: true,
 			force: true,
 			filter: (x) => {
-				if (x.endsWith(targetsPath)) {
+				if (x.endsWith(targetsJsonPath)) {
 					return false;
 				}
 				return true;

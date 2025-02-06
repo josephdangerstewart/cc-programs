@@ -1,6 +1,6 @@
 local Classy = require("classy.Classy")
 local Codes = require("rtp.Codes")
-local BackgroundWorker = require("BackgroundWorker")
+local BackgroundWorker = require("backgroundWorker.BackgroundWorker")
 
 local RtpServer = Classy:extend()
 

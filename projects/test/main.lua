@@ -1,12 +1,18 @@
-local basalt = require("lib.basalt") --> Load the Basalt framework into the variable called "basalt"
-local TestController = require("test.app.TestController")
-local OtherScreenController = require("test.app.OtherScreenController")
-local AppController = require("mvc.AppControllerBase")
+local Classy = require("classy.Classy")
 
---> Now we want to create a base frame, we call the variable "main" - by default everything you create is visible. (you don't need to use :show())
-local appController = AppController:new()
+local TestBase = Classy:extend()
+local TestSub = TestBase:extend()
 
-appController:registerScreen(TestController, "test")
-appController:registerScreen(OtherScreenController, "other")
+print("sub is base", TestSub:isType(TestBase))
+print("base is sub", TestBase:isType(TestSub))
+print("sub is classy", TestSub:isType(Classy))
+print("base is classy", TestSub:isType(Classy))
 
-basalt.autoUpdate() -- As soon as we call basalt.autoUpdate, the event and draw handlers will listen to any incoming events (and draw if necessary)
+local baseInst = TestBase:new();
+
+local subInst = TestSub:new();
+
+print("sub inst is base", subInst:isType(TestBase))
+print("base inst is sub", baseInst:isType(TestSub))
+print("sub inst is classy", subInst:isType(Classy))
+print("base inst is classy", baseInst:isType(Classy))

@@ -7,6 +7,16 @@ local function contains(t, item)
 	return false
 end
 
+local function indexOf(t, item)
+	for i, v in ipairs(t) do
+		if v == item then
+			return i
+		end
+	end
+
+	return -1
+end
+
 local function map(t, mapper)
 	local result = {}
 	for i,v in pairs(t) do
@@ -59,4 +69,5 @@ return {
 	filter = filter,
 	toSet = toSet,
 	find = find,
+	indexOf = indexOf
 }

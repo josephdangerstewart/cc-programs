@@ -1,3 +1,5 @@
+local listUtil = require("util.list")
+
 local Classy = {}
 
 --[[ Extends a class ]]
@@ -5,9 +7,12 @@ function Classy:extend(staticProperties)
 	local resultingClass = {
 		__classy = {
 			kind = "class",
-			super = self
+			super = self,
+			classChain = (self.__classy and self.__classy.classChain) or {Classy},
 		}
 	}
+
+	table.insert(resultingClass.__classy.classChain, resultingClass)
 
 	setmetatable(resultingClass, {
 		__index = self
@@ -17,6 +22,10 @@ function Classy:extend(staticProperties)
 		for key in pairs(staticProperties) do
 			resultingClass[key] = staticProperties[key]
 		end
+	end
+
+	function resultingClass:init(...)
+		self.super:init(...)
 	end
 
 	return resultingClass
@@ -88,6 +97,16 @@ local function getIndexedProperty(instance, class, key)
 	end
 end
 
+function Classy:isType(class)
+	assert((class.__classy and class.__classy.kind == "class") or class == Classy, "class must be a Classy class")
+
+	if self.__classy.kind == "instance" then
+		return listUtil.indexOf(self.__classy.classChain, self.__classy.class) >= listUtil.indexOf(self.__classy.classChain, class)
+	else
+		return listUtil.indexOf(self.__classy.classChain, self) >= listUtil.indexOf(self.__classy.classChain, class)
+	end
+end
+
 function Classy:new(...)
 	assert(self.__classy ~= nil, "attempted to instantiate non-class")
 
@@ -96,6 +115,8 @@ function Classy:new(...)
 			kind = "instance",
 			isFullyConstructed = false,
 			baseinitCalls = 0,
+			class = self,
+			classChain = self.__classy.classChain,
 		}
 	}
 

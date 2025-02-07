@@ -1,3 +1,13 @@
-local nbtUtility = require("util.nbt")
+local ChestNetwork = require("periphery.types.ChestNetwork")
+local matchers = require("periphery.peripheralMatchers")
 
-print(textutils.serialise(nbtUtility.parseName("minecraft:raw_iron")))
+local chest = "minecraft:chest_0"
+
+print(matchers.isMatch({peripheral.getType(chest)}, ChestNetwork.getPeripheralTypes()))
+local network = ChestNetwork:new({chest})
+
+for i,v in pairs(peripheral.getNames()) do
+	print("can accept " .. v .. "?", network:canAcceptPeripheral(v))
+end
+
+print(textutils.serialise(network:list()))

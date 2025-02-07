@@ -23,3 +23,5 @@ end
 function VirtualPeripheralBase:getMeta()
 	return self.meta
 end
+
+return VirtualPeripheralBase

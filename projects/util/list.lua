@@ -62,6 +62,12 @@ local function find(t, findCallback)
 	return nil, -1
 end
 
+local function insertAll(t, ...)
+	for i,v in pairs({...}) do
+		table.insert(t, v)
+	end
+end
+
 return {
 	contains = contains,
 	map = map,
@@ -69,5 +75,6 @@ return {
 	filter = filter,
 	toSet = toSet,
 	find = find,
-	indexOf = indexOf
+	indexOf = indexOf,
+	insertAll = insertAll,
 }

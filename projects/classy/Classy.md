@@ -47,3 +47,36 @@ local bazInstance = BazClass:new("param 1", "param 2")
 -- This will print "FooClass logic" and then "BazClass logic"
 bazInstance:barInstanceMethod()
 ```
+
+## Class methods
+
+* `isType(class): boolean` - returns true if the Class is equal to or derives from `class`
+* `new(...)` - Constructs a new instance of the Class
+* `extend(staticProperties)` - Creates a new derived class. Optionally pass in some static properties.
+
+## Instance methods
+
+* `isType(class): boolean` - returns true if the instance is an direct instance of the class or one of it's derived classes.
+
+## Type checking
+
+```lua
+local Classy = require("classy.Classy")
+
+local TestBase = Classy:extend()
+local TestSub = TestBase:extend()
+
+print("sub is base", TestSub:isType(TestBase))  -- True
+print("base is sub", TestBase:isType(TestSub))  -- False
+print("sub is classy", TestSub:isType(Classy))  -- True
+print("base is classy", TestSub:isType(Classy)) -- True
+
+local baseInst = TestBase:new();
+
+local subInst = TestSub:new();
+
+print("sub inst is base", subInst:isType(TestBase))   -- True
+print("base inst is sub", baseInst:isType(TestSub))   -- False
+print("sub inst is classy", subInst:isType(Classy))   -- True
+print("base inst is classy", baseInst:isType(Classy)) -- True
+```

@@ -6,8 +6,11 @@ local VirtualPeripheralBase = Classy:extend({
 	end
 })
 
-function VirtualPeripheralBase:init()
-	self.super:init()
+function VirtualPeripheralBase:init(meta)
+	self.super:init(meta or {
+		name = "Virtual Peripheral",
+		description = "Please put a description of what this peripheral does"
+	})
 end
 
 function VirtualPeripheralBase:canAcceptPeripheral(peripheralName)
@@ -15,4 +18,8 @@ function VirtualPeripheralBase:canAcceptPeripheral(peripheralName)
 end
 
 function VirtualPeripheralBase:acceptPeripheral(peripheralName)
+end
+
+function VirtualPeripheralBase:getMeta()
+	return self.meta
 end

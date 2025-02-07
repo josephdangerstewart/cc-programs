@@ -1,12 +1,15 @@
 local basalt = require("lib.basalt")
 
 return function (owningFrame, controller)
-	local container = owningFrame:addFrame();
+	local container = owningFrame:addFrame():setBackground(colors.white);
 
-	container:addButton()
+	container
+		:addButton()
 		:setText("Click me")
-		:setPosition(1, 1)
+		:setForeground(colors.white)
+		:setPosition(2, 2)
+		:setHorizontalAlign("center")
 		:onClick(function()
-			basalt.debug("clicked")
+			controller:handleClick()
 		end)
 end

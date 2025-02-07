@@ -1,6 +1,7 @@
 {
 	"dependencies": [
 		"util",
-		"classy"
+		"classy",
+		"lib"
 	]
 }

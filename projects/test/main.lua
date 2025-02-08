@@ -1,13 +1,14 @@
 local ChestNetwork = require("periphery.types.ChestNetwork")
 local matchers = require("periphery.peripheralMatchers")
 
-local chest = "minecraft:chest_0"
-
-print(matchers.isMatch({peripheral.getType(chest)}, ChestNetwork.getPeripheralTypes()))
-local network = ChestNetwork:new({chest})
-
+local chests = {}
 for i,v in pairs(peripheral.getNames()) do
-	print("can accept " .. v .. "?", network:canAcceptPeripheral(v))
+	if matchers.isMatch({peripheral.getType(v)}, ChestNetwork.getPeripheralTypes()) then
+		print("adding "..v)
+		table.insert(chests, v)
+	end
 end
+
+local network = ChestNetwork:new(chests)
 
 print(textutils.serialise(network:list()))

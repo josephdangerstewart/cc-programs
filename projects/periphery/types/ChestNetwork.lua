@@ -1,6 +1,5 @@
 local VirtualPeripheralBase = require("periphery.VirtualPeripheralBase")
 local matchers = require("periphery.peripheralMatchers")
-local listUtil = require("util.list")
 local nbtUtil = require("util.nbt")
 
 local ChestNetwork = VirtualPeripheralBase:extend({

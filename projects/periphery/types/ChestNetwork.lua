@@ -1,6 +1,7 @@
 local VirtualPeripheralBase = require("periphery.VirtualPeripheralBase")
 local matchers = require("periphery.peripheralMatchers")
 local listUtil = require("util.list")
+local nbtUtil = require("util.nbt")
 
 local ChestNetwork = VirtualPeripheralBase:extend({
 	getPeripheralTypes = function()
@@ -26,24 +27,24 @@ function ChestNetwork:init(chests, limit)
 		if not matchers.isMatch({peripheral.getType(v)}, self.getPeripheralTypes()) then
 			error("tried to wrap non-inventory peripheral")
 		end
-		table.insert(wrappedChests, peripheral.wrap(v))
+		wrappedChests[v] = peripheral.wrap(v)
 	end
 
 	self:initProperties({
 		chests = wrappedChests,
-		chestNames = chests,
-		limit = limit or -1
+		limit = limit or -1,
+		cachedInventory = nil
 	})
 end
 
 function ChestNetwork:canAcceptPeripheral(peripheralName)
-	return not listUtil.contains(self.chestNames, peripheralName) and matchers.isMatch({peripheral.getType(peripheralName)}, self.getPeripheralTypes()) and (self.limit == -1 or #self.chests < self.limit)
+	return not self.chests[peripheralName] and matchers.isMatch({peripheral.getType(peripheralName)}, self.getPeripheralTypes()) and (self.limit == -1 or #self.chests < self.limit)
 end
 
 function ChestNetwork:acceptPeripheral(peripheralName)
 	assert(self:canAcceptPeripheral(peripheralName), "cannot accept peripheral")
-	table.insert(self.chests, peripheral.wrap(peripheralName))
-	table.insert(self.chestNames, peripheralName)
+	self.chests[peripheralName] = peripheral.wrap(peripheralName)
+	self.cachedInventory = nil
 end
 
 --- A limit of how many chests can be used in the network, defaults to no limit
@@ -52,10 +53,31 @@ function ChestNetwork:getChestLimit()
 end
 
 function ChestNetwork:list()
-	local results = {}
-	for i, chest in pairs(self.chests) do
-		listUtil.insertAll(results, table.unpack(chest.list()))
+	return self:_scanInventory()
+end
+
+function ChestNetwork:_scanInventory()
+	if self.cachedInventory ~= nil then
+		return self.cachedInventory
 	end
+
+	local results = {}
+	for chestName, chest in pairs(self.chests) do
+		for index, item in pairs(chest.list()) do
+			local parsedName = nbtUtil.parseName(item.name)
+			results[item.name] = results[item.name] or {
+				id = item.name,
+				name = parsedName.itemName,
+				source = parsedName.source,
+				count = 0,
+				locations = {}
+			}
+			results[item.name].count = results[item.name].count + item.count
+			table.insert(results[item.name].locations, { chestName = chestName, index = index, count = item.count })
+		end
+	end
+
+	self.cachedInventory = results
 	return results
 end
 

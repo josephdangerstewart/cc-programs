@@ -14,6 +14,7 @@ local id, data = fooDb:create({ foo = "bar" }) -- Data passed in here should be 
 data.foo = "baz" -- Mutations are safe
 
 fooDb:listAll() -- Returns a key-value pair table
+fooDb:enumerateAll() -- Returns an enumerator for use in for loops
 
 fooDb:update(id, data) -- Returns false, errorMessage on failure and true on success
 

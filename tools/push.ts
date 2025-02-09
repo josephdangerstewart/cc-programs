@@ -72,7 +72,9 @@ function copyProject(project: string, target: string) {
 	}
 
 	for (const existingItem of fs.readdirSync(targetPath)) {
-		rimrafSync(path.join(targetPath, existingItem));
+		rimrafSync(path.join(targetPath, existingItem), {
+			filter: (pathName) => !pathName.endsWith('.db')
+		});
 	}
 
 	pushedTargetsByProject[project].push(targetPath);

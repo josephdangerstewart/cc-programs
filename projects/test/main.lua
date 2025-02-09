@@ -1,7 +1,8 @@
-local ChestNetwork = require("periphery.types.ChestNetwork")
+local Database = require("data.Database")
 
-local network1 = ChestNetwork:new({"minecraft:chest_0", "minecraft:chest_1"})
-local network2 = ChestNetwork:new({"minecraft:chest_2", "minecraft:chest_3"})
+local fooDb = Database:new("test/fooDb")
 
-print(textutils.serialise(network1:list()))
-network2:output("minecraft:oak_log", 3, network1)
+local id = fooDb:create({ foo = "hi" })
+fooDb:update(id, { foo = "bar" })
+
+print(textutils.serialize(fooDb:listAll()))

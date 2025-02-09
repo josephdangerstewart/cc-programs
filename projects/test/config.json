@@ -3,7 +3,8 @@
 		"rtp",
 		"lib",
 		"mvc",
-		"periphery"
+		"periphery",
+		"data"
 	],
 	"entry": {
 		"fileName": "startup"

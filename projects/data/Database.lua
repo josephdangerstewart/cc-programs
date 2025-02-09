@@ -9,6 +9,9 @@ end
 local Database = Classy:extend()
 
 function Database:init(filePath)
+	self.super:init()
+
+	assert(type(filePath) == "string", "first parameter must be string")
 	filePath = stringUtil.endsWith(filePath, ".db") and filePath or filePath..".db"
 	self:initProperties({
 		filePath = filePath,
@@ -18,13 +21,9 @@ end
 
 function Database:create(data)
 	local id = getId()
-	local record = {
-		id = id,
-		data = data,
-	}
 
 	local fileContents = self:_getFileContents()
-	fileContents.data[id] = record;
+	fileContents.data[id] = data;
 
 	self:_writeFileContents(fileContents)
 
@@ -37,6 +36,7 @@ function Database:update(id, newData)
 		return false, "No such record"
 	end
 
+	print(id, newData)
 	fileContents.data[id] = newData
 
 	self:_writeFileContents(fileContents)

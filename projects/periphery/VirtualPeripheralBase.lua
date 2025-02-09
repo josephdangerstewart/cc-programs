@@ -3,7 +3,8 @@ local Classy = require("classy.Classy")
 local VirtualPeripheralBase = Classy:extend({
 	getPeripheralTypes = function()
 		return {}
-	end
+	end,
+	name = "VirtualPeripheral"
 })
 
 function VirtualPeripheralBase:init(meta)

@@ -8,7 +8,8 @@ local ChestNetwork = VirtualPeripheralBase:extend({
 			matchers.requireChest("minecraft:chest"),
 			matchers.requireChest("create:item_vault")
 		)
-	end
+	end,
+	name = "ChestNetwork"
 })
 
 function ChestNetwork:init(chests, limit)

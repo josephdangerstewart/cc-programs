@@ -147,12 +147,16 @@ function Classy:new(...)
 	return instance
 end
 
-function Classy:init()
+function Classy:init(properties)
 	assert(self.__classy ~= nil, "Invalid init call")
 	assert(self.__classy.kind == "instance", "Attempted to construct non instance")
 	assert(self.__classy.isFullyConstructed == false, "Attempted to construct already constructed instance")
 	assert(self.__classy.baseinitCalls == 0, "Attempted to call init twice")
 	self.__classy.baseinitCalls = self.__classy.baseinitCalls + 1
+
+	if properties ~= nil then
+		self:initProperties(properties)
+	end
 end
 
 function Classy:initProperties(properties)

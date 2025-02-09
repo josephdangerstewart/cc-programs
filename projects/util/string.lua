@@ -2,6 +2,10 @@ local function startsWith(s, frag)
 	return string.sub(s,1,string.len(frag)) == frag
 end
 
+local function endsWith(s, frag)
+	return string.sub(s, string.len(s) - string.len(frag)) == frag
+end
+
 local function split(s, separator)
 	local result = {}
 	for match in string.gmatch(s, "([^" .. separator .. "]+)") do
@@ -28,4 +32,5 @@ return {
 	split = split,
 	capitalize = capitalize,
 	formatSnakeCase = formatSnakeCase,
+	endsWith = endsWith,
 }

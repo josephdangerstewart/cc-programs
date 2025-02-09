@@ -1,6 +1,7 @@
 {
 	"dependencies": [
 		"classy",
-		"util"
+		"util",
+		"data"
 	]
 }

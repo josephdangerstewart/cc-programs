@@ -3,7 +3,7 @@ local matchers = require("periphery.peripheralMatchers")
 local nbtUtil = require("util.nbt")
 
 local ChestNetwork = VirtualPeripheralBase:extend({
-	getPeripheralTypes = function()
+	getPeripheralValidator = function()
 		return matchers.requireAny(
 			matchers.requireChest("minecraft:chest"),
 			matchers.requireChest("create:item_vault")
@@ -12,7 +12,7 @@ local ChestNetwork = VirtualPeripheralBase:extend({
 	name = "ChestNetwork"
 })
 
-function ChestNetwork:init(chests, limit)
+function ChestNetwork:init(chests)
 	self.super:init({
 		name = "Chest Network",
 		description = "A wrapper to treat multiple inventories as one (use an derived class for more specialized purposes such as input, output, and storage)",
@@ -20,11 +20,9 @@ function ChestNetwork:init(chests, limit)
 
 	chests = type(chests) == "table" and chests or {chests}
 
-	assert(limit == nil or #chests <= limit, "too many chests")
-
 	local wrappedChests = {}
 	for i,v in pairs(chests or {}) do
-		if not matchers.isMatch({peripheral.getType(v)}, self.getPeripheralTypes()) then
+		if not matchers.isMatch({peripheral.getType(v)}, self.getPeripheralValidator()) then
 			error("tried to wrap non-inventory peripheral")
 		end
 		wrappedChests[v] = peripheral.wrap(v)
@@ -32,28 +30,12 @@ function ChestNetwork:init(chests, limit)
 
 	self:initProperties({
 		chests = wrappedChests,
-		limit = limit or -1,
 		cachedInventory = nil
 	})
 end
 
-function ChestNetwork:canAcceptPeripheral(peripheralName)
-	return not self.chests[peripheralName] and matchers.isMatch({peripheral.getType(peripheralName)}, self.getPeripheralTypes()) and (self.limit == -1 or #self.chests < self.limit)
-end
-
-function ChestNetwork:acceptPeripheral(peripheralName)
-	assert(self:canAcceptPeripheral(peripheralName), "cannot accept peripheral")
-	self.chests[peripheralName] = peripheral.wrap(peripheralName)
-	self:_clearCache()
-end
-
 function ChestNetwork:isItemAllowed(itemName)
 	return true
-end
-
---- A limit of how many chests can be used in the network, defaults to no limit
-function ChestNetwork:getChestLimit()
-	return self.limit
 end
 
 function ChestNetwork:refresh()
@@ -77,7 +59,7 @@ function ChestNetwork:_getChestNetwork(chestOrNetwork)
 		return self
 	end
 
-	if type(chestOrNetwork) == "string" and matchers.isMatch({peripheral.getType(chestOrNetwork)}, ChestNetwork.getPeripheralTypes()) then
+	if type(chestOrNetwork) == "string" and matchers.isMatch({peripheral.getType(chestOrNetwork)}, ChestNetwork.getPeripheralValidator()) then
 		return ChestNetwork:new(chestOrNetwork)
 	end
 

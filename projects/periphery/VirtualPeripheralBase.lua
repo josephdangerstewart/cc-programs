@@ -1,8 +1,11 @@
 local Classy = require("classy.Classy")
 
 local VirtualPeripheralBase = Classy:extend({
-	getPeripheralTypes = function()
+	getPeripheralValidator = function()
 		return {}
+	end,
+	canConstruct = function(peripherals, options)
+		return true
 	end,
 	name = "VirtualPeripheral"
 })
@@ -18,22 +21,8 @@ function VirtualPeripheralBase:init(meta)
 	})
 end
 
-function VirtualPeripheralBase:canAcceptPeripheral(peripheralName)
-	return false
-end
-
-function VirtualPeripheralBase:acceptPeripheral(peripheralName)
-end
-
 function VirtualPeripheralBase:getMeta()
 	return self.meta
-end
-
-function VirtualPeripheralBase:setOptions()
-end
-
-function VirtualPeripheralBase:getOptions()
-	return {}
 end
 
 return VirtualPeripheralBase

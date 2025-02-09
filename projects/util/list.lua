@@ -27,7 +27,7 @@ end
 
 local function combine(...)
 	local result = {}
-	for argIndex, argTable in ipairs(arg) do
+	for argIndex, argTable in ipairs({...}) do
 		for i,v in pairs(argTable) do
 			table.insert(result, v)
 		end

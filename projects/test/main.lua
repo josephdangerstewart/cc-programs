@@ -1,14 +1,6 @@
 local ChestNetwork = require("periphery.types.ChestNetwork")
-local matchers = require("periphery.peripheralMatchers")
 
-local chests = {}
-for i,v in pairs(peripheral.getNames()) do
-	if matchers.isMatch({peripheral.getType(v)}, ChestNetwork.getPeripheralTypes()) then
-		print("adding "..v)
-		table.insert(chests, v)
-	end
-end
+local network1 = ChestNetwork:new({"minecraft:chest_0", "minecraft:chest_1"})
+local network2 = ChestNetwork:new({"minecraft:chest_2", "minecraft:chest_3"})
 
-local network = ChestNetwork:new(chests)
-
-print(textutils.serialise(network:list()))
+print(network2:output("minecraft:oak_log", 3, network1))

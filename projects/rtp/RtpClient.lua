@@ -94,7 +94,7 @@ end
 function RtpClient:_resolveId(idOrHost)
 	local id = idOrHost
 	if type(idOrHost) == "string" then
-		ids = {rednet.lookup("rtp", idOrHost)}
+		local ids = {rednet.lookup("rtp", idOrHost)}
 		if #ids == 0 then
 			return nil, Codes.NotFound, "Host not resolved"
 		elseif #ids > 1 then

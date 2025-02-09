@@ -107,6 +107,10 @@ function Classy:isType(class)
 	end
 end
 
+function Classy:assertIsType(class)
+	assert(self:isType(class), "invalid class")
+end
+
 function Classy:new(...)
 	assert(self.__classy ~= nil, "attempted to instantiate non-class")
 

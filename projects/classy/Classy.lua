@@ -158,7 +158,7 @@ end
 function Classy:initProperties(properties)
 	assert(self.__classy ~= nil, "Invalid initProperties call")
 	assert(self.__classy.kind == "instance", "Attempted to init properties on non instance")
-	assert(self.__classy.isFullyConstructed == false, "Attempted to init properties on constructed instance")
+	assert(self.__classy.isFullyConstructed == false, "Attempted to init properties on unconstructed instance")
 
 	for key, value in pairs(properties) do
 		assert(key ~= "__classy" and key ~= "super", "Attempted to init invalid property: " .. key)

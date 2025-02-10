@@ -48,11 +48,11 @@ function ChestNetwork:list()
 	return self:_scanInventory()
 end
 
-function ChestNetwork:output(itemName, count, destination)
+function ChestNetwork:giveItem(itemName, count, destination)
 	return self:_transfer(self, self:_getChestNetwork(destination), itemName, count)
 end
 
-function ChestNetwork:input(itemName, count, source)
+function ChestNetwork:takeItem(itemName, count, source)
 	return self:_transfer(self:_getChestNetwork(source), self, itemName, count)
 end
 

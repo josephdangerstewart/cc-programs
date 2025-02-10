@@ -16,7 +16,7 @@ local ChestNetwork = VirtualPeripheralBase:extend({
 	name = "ChestNetwork"
 })
 
-function ChestNetwork:init(chests)
+function ChestNetwork:init(chests, options, peripheryNetwork)
 	self.super:init()
 
 	chests = type(chests) == "table" and chests or {chests}
@@ -31,7 +31,8 @@ function ChestNetwork:init(chests)
 
 	self:initProperties({
 		chests = wrappedChests,
-		cachedInventory = nil
+		cachedInventory = nil,
+		peripheryNetwork = peripheryNetwork,
 	})
 end
 
@@ -60,8 +61,15 @@ function ChestNetwork:_getChestNetwork(chestOrNetwork)
 		return self
 	end
 
-	if type(chestOrNetwork) == "string" and matchers.isMatch({peripheral.getType(chestOrNetwork)}, ChestNetwork.getPeripheralValidator()) then
-		return ChestNetwork:new(chestOrNetwork)
+	if type(chestOrNetwork) == "string" then
+		local vPeripheral = self.peripheryNetwork:get(chestOrNetwork)
+		if vPeripheral and vPeripheral:isType(ChestNetwork) then
+			return vPeripheral
+		end
+
+		if matchers.isMatch({peripheral.getType(chestOrNetwork)}, ChestNetwork.getPeripheralValidator()) then
+			return ChestNetwork:new(chestOrNetwork)
+		end
 	end
 
 	if type(chestOrNetwork) == "table" and chestOrNetwork:isType(ChestNetwork) then

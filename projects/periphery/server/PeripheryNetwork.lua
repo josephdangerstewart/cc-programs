@@ -44,10 +44,18 @@ function PeripheryNetwork:get(peripheralId)
 	return nil
 end
 
-function PeripheryNetwork:list()
+function PeripheryNetwork:list(typeFilter)
 	local results = {}
 	for id in self.database:enumerateAll() do
-		results[id] = self:get(id)
+		local existing = self:get(id)
+
+		if
+			(not typeFilter) or
+			(type(typeFilter) == "string" and existing and existing.name == typeFilter) or
+			(existing and existing:isType(typeFilter))
+		then
+			results[id] = existing
+		end
 	end
 
 	return results

@@ -57,11 +57,11 @@ function ChestNetwork:takeItem(itemName, count, source)
 end
 
 function ChestNetwork:_getChestNetwork(chestOrNetwork)
-	if self.chests[chestOrNetwork] then
-		return self
-	end
-
 	if type(chestOrNetwork) == "string" then
+		if self.chests[chestOrNetwork] then
+			return self
+		end
+
 		local vPeripheral = self.peripheryNetwork:get(chestOrNetwork)
 		if vPeripheral and vPeripheral:isType(ChestNetwork) then
 			return vPeripheral
@@ -72,6 +72,7 @@ function ChestNetwork:_getChestNetwork(chestOrNetwork)
 		end
 	end
 
+	print("resolving", chestOrNetwork)
 	if type(chestOrNetwork) == "table" and chestOrNetwork:isType(ChestNetwork) then
 		return chestOrNetwork
 	end

@@ -36,6 +36,7 @@ function PeripheryNetwork:get(peripheralId)
 	if dbPeripheral then
 		local PeripheralType = self:_resolveNameOrType(dbPeripheral.type)
 		local instance = PeripheralType:new(dbPeripheral.peripherals, dbPeripheral.options, self)
+		instance:setId(peripheralId)
 		self.virtualPeripherals[peripheralId] = instance
 		return instance
 	end
@@ -187,6 +188,10 @@ function PeripheryNetwork:listVirtualPeripheralTypes()
 		table.insert(results, v)
 	end
 	return results
+end
+
+function PeripheryNetwork:getVirtualPeripheralType(typeName)
+	return self.peripheralTypes[typeName]
 end
 
 function PeripheryNetwork:_resolveNameOrType(nameOrType)

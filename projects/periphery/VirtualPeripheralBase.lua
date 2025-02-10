@@ -14,10 +14,16 @@ local VirtualPeripheralBase = Classy:extend({
 	name = "VirtualPeripheral"
 })
 
-function VirtualPeripheralBase:init(meta)
+function VirtualPeripheralBase:init()
 	self.super:init()
+end
 
-	self:initProperties()
+function VirtualPeripheralBase:setId(id)
+	self.id = id
+end
+
+function VirtualPeripheralBase:getId()
+	return self.id
 end
 
 function VirtualPeripheralBase:getMeta()

@@ -115,7 +115,7 @@ function RtpServer:_handleIncomingMessage(sourceId, name, body, requestId)
 	local status, result, code = pcall(function() return self.routes[name](body) end)
 
 	if not status then
-		self:_log(result, "error")
+		self:_log(result .. "\n" .. debug.traceback(), "error")
 		self:_sendResponse(sourceId, Codes.Error, { err = result }, requestId)
 		return
 	end
@@ -143,7 +143,7 @@ function RtpServer:_log(message, level)
 	local messageLevel = levelMap[level]
 	local loggingLevel = levelMap[self.logLevel]
 
-	if messageLevel == nil or loggingLevel == nil or loggingLevel > messageLevel then
+	if messageLevel == nil or loggingLevel == nil or messageLevel > loggingLevel then
 		return
 	end
 

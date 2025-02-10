@@ -18,7 +18,7 @@ function BackgroundWorker:getWorker()
 			if #_self.queue > 0 then
 				local workItem = _self.queue[1]
 				table.remove(_self.queue, 1)
-				_self.doWork(unpack(workItem))
+				_self.doWork(table.unpack(workItem))
 			else
 				sleep(0.05)
 			end
@@ -27,7 +27,7 @@ function BackgroundWorker:getWorker()
 end
 
 function BackgroundWorker:queueWork(...)
-	table.insert(self.queue, arg)
+	table.insert(self.queue, {...})
 end
 
 return BackgroundWorker

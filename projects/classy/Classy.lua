@@ -111,6 +111,16 @@ function Classy:assertIsType(class)
 	assert(self:isType(class), "invalid class")
 end
 
+function Classy:isInstance(class)
+	local target = class and class or self
+	return target and target.__classy and target.__classy.kind == "instance"
+end
+
+function Classy:isClass(class)
+	local target = class and class or self
+	return target and target.__classy and target.__classy.kind == "class"
+end
+
 function Classy:new(...)
 	assert(self.__classy ~= nil, "attempted to instantiate non-class")
 

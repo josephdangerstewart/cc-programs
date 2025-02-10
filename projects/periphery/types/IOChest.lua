@@ -13,10 +13,20 @@ local IOChest = ChestNetwork:extend({
 })
 
 function IOChest:intake(destination)
-	self:refresh()
-	for itemName, item in ipairs(self:list()) do
-		self:output(itemName, item.count, destination)
+	for itemName, item in pairs(self:list()) do
+		local success, error = self:giveItem(itemName, item.count, destination)
+
+		if not success then
+			return false, error
+		end
 	end
+
+	return true
+end
+
+function IOChest:list()
+	self:refresh()
+	return self.super:list()
 end
 
 return IOChest

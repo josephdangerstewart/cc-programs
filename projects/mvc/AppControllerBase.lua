@@ -11,10 +11,7 @@ function AppController:init()
 
 	self:initProperties({
 		rootFrame = self.view.rootFrame,
-		currentScreen = nil,
-		screenArgs = {},
-		allScreens = {},
-		screenControllers = {},
+		navMenuIndexes = {}
 	})
 end
 
@@ -29,38 +26,13 @@ function AppController:navMenuChanged()
 	self:changeScreen(navItem.args[1], navItem.args[2])
 end
 
-function AppController:changeScreen(screen, args)
-	if self.allScreens[screen] == nil then
-		return false, "No such screen"
+function AppController:onChangeScreen(controller, screenName)
+	if type(self.navMenuIndexes[screenName]) == "number" then
+		self.view.navMenu:selectItem(self.navMenuIndexes[screenName].navMenuIndex, false)
 	end
-
-	self.screenArgs = args
-
-	if self.currentScreen ~= nil then
-		self.currentScreen:hide()
-	end
-
-	self.allScreens[screen].frame:show()
-
-	if self.allScreens[screen].controller.onShow ~= nil then
-		self.allScreens[screen].controller:onShow(args)
-	end
-	
-	self.view.navMenu:selectItem(self.allScreens[screen].navMenuIndex, false)
-
-	self.currentScreen = self.allScreens[screen].frame
 end
 
-function AppController:registerScreen(controllerClass, screenName)
-	local screenFrame = self.view.rootFrame
-		:addFrame()
-		:setBackground(colors.white)
-	
-	local controller = controllerClass:new(screenFrame, self)
-
-	table.insert(self.screenControllers, controller)
-
-	local navMenuIndex = nil
+function AppController:onRegisterScreen(controller, screenName)
 	if controller.getNavButton then
 		local button = controller:getNavButton()
 
@@ -71,22 +43,8 @@ function AppController:registerScreen(controllerClass, screenName)
 			screenName,
 			button.args
 		)
-		navMenuIndex = self.view.navMenu:getItemCount()
+		self.navMenuIndexes[screenName] = self.view.navMenu:getItemCount()
 	end
-
-	self.allScreens[screenName] = {
-		frame = screenFrame,
-		controller = controller,
-		navMenuIndex = navMenuIndex,
-	}
-
-	screenFrame:hide()
-
-	if self.currentScreen == nil then
-		self:changeScreen(screenName)
-	end
-
-	return controller
 end
 
 function AppController:stopApp()

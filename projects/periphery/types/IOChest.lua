@@ -1,13 +1,6 @@
-local ChestNetwork = require("ChestNetwork")
-local matchers = require("periphery.peripheralMatchers")
+local ChestNetwork = require("periphery.types.ChestNetwork")
 
 local IOChest = ChestNetwork:extend({
-	getPeripheralValidator = function()
-		return matchers.requireAny(
-			matchers.requireChest("minecraft:chest"),
-			matchers.requireChest("create:item_vault")
-		)
-	end,
 	canConstruct = function(peripherals)
 		peripherals = peripherals or {}
 		return #peripherals <= 1

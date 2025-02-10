@@ -121,8 +121,8 @@ function ChestNetwork:_transfer(
 		print(destinationChest, peripheral.wrap(sourceChest))
 		remaining = remaining - wrappedDestination.pullItems(sourceChest, sourceSlot, remaining, destinationSlot)
 
-		fromNetwork:_clearCache()
-		toNetwork:_clearCache()
+		fromNetwork:refresh()
+		toNetwork:refresh()
 	end
 
 	if remaining > 0 then

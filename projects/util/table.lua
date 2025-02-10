@@ -12,6 +12,15 @@ local function copyDeep(t)
 	return result
 end
 
+local function keys(t)
+	local result = {}
+	for key in pairs(t) do
+		table.insert(result, key)
+	end
+	return result
+end
+
 return {
-	copyDeep = copyDeep
+	copyDeep = copyDeep,
+	keys = keys
 }

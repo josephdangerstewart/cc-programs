@@ -1,6 +1,7 @@
 local Classy = require("classy.Classy")
 local Database = require("data.Database")
 local listUtil = require("util.list")
+local tableUtil = require("util.table")
 local matchers = require("periphery.peripheralMatchers")
 local VirtualPeripheralBase = require("periphery.VirtualPeripheralBase")
 
@@ -14,7 +15,7 @@ function PeripheryNetwork:init(...)
 	local peripheralTypes = {}
 	for i, peripheralType in pairs({...}) do
 		peripheralType:assertIsType(VirtualPeripheralBase)
-		peripheralType[peripheralType.name] = peripheralType
+		peripheralTypes[peripheralType.name] = peripheralType
 	end
 
 	self:initProperties({
@@ -54,16 +55,25 @@ end
 
 function PeripheryNetwork:create(nameOrType, peripherals, options, meta)
 	local PeripheralType = self:_resolveNameOrType(nameOrType)
+	if not PeripheralType then
+		return false, "Invalid virtual peripheral type"
+	end
+
+	peripherals = peripherals or {}
 
 	if not self:_isValidConstruction(PeripheralType, peripherals, options) then
 		return false, "Invalid construction"
 	end
 
+	if not self:_areAllPeripheralsUnclaimed(peripherals) then
+		return false, "Some peripherals are claimed"
+	end
+
 	local id = self.database:create({
 		type = PeripheralType.name,
 		peripherals = peripherals,
-		options = options,
-		meta = meta,
+		options = options or {},
+		meta = meta or {},
 	})
 
 	return id, self:get(id)
@@ -147,7 +157,7 @@ function PeripheryNetwork:listUnclaimedPeripherals()
 	local claimedPeripherals = listUtil.toSet(self:_getClaimedPeripherals())
 
 	local results = {}
-	for i, peripheralName in allPeripherals do
+	for i, peripheralName in pairs(allPeripherals) do
 		if not claimedPeripherals[peripheralName] then
 			table.insert(results, peripheralName)
 		end
@@ -190,10 +200,30 @@ function PeripheryNetwork:_arePeripheralsPotentialMatch(PeripheralType, peripher
 			return false, "Invalid peripheral type"
 		end
 	end
+
+	return true
 end
 
 function PeripheryNetwork:_isValidConstruction(PeripheralType, peripherals, options)
 	return self:_arePeripheralsPotentialMatch(PeripheralType, peripherals) and PeripheralType.canConstruct(peripherals, options)
+end
+
+function PeripheryNetwork:_areAllPeripheralsUnclaimed(peripherals)
+	local claimingIdsSet = {}
+	for id, record in self.database:enumerateAll() do
+		for j, peripheralName in pairs(peripherals) do
+			if listUtil.contains(record.peripherals, peripheralName) then
+				claimingIdsSet[id] = true
+			end
+		end
+	end
+
+	local claimingIds = tableUtil.keys(claimingIdsSet)
+	if #claimingIds > 0 then
+		return false, claimingIds
+	end
+
+	return true
 end
 
 return PeripheryNetwork

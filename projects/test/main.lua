@@ -1,8 +1,11 @@
-local Database = require("data.Database")
+local PeripheryNetwork = require("periphery.server.PeripheryNetwork")
+local ChestNetwork = require("periphery.types.ChestNetwork")
 
-local fooDb = Database:new("test/fooDb")
+local periphery = PeripheryNetwork:new(ChestNetwork)
+print(ChestNetwork.name)
 
-local id = fooDb:create({ foo = "hi" })
-fooDb:update(id, { foo = "bar" })
+local network1 = periphery:get("0.8801274637736410.05")
 
-print(textutils.serialize(fooDb:listAll()))
+print(network1)
+
+print(textutils.serialize(periphery:listUnclaimedPeripherals()))

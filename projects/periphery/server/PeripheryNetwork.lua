@@ -71,7 +71,7 @@ function PeripheryNetwork:create(nameOrType, peripherals, options, meta)
 
 	local id = self.database:create({
 		type = PeripheralType.name,
-		peripherals = peripherals,
+		peripherals = listUtil.unique(peripherals),
 		options = options or {},
 		meta = meta or {},
 	})
@@ -86,7 +86,7 @@ function PeripheryNetwork:update(id, updateRequest)
 		return false, "Not found"
 	end
 
-	existing.peripherals = updateRequest.peripherals or existing.peripherals
+	existing.peripherals = listUtil.unique(updateRequest.peripherals or existing.peripherals)
 	existing.options = updateRequest.options or existing.options
 	existing.meta = updateRequest.meta or existing.meta
 
@@ -95,7 +95,14 @@ function PeripheryNetwork:update(id, updateRequest)
 		return false, "Invalid construction"
 	end
 
-	self.database:update(id, existing)
+	local areAllUnclaimed, claimingIds = self:_areAllPeripheralsUnclaimed(existing.peripherals)
+
+	if areAllUnclaimed or (claimingIds and #claimingIds == 1 and claimingIds[1] == id) then
+		self.database:update(id, existing)
+	else
+		return false, "Some peripherals are claimed"
+	end
+
 
 	self.virtualPeripherals[id] = nil
 	return self:get(id)
@@ -126,7 +133,7 @@ end
 function PeripheryNetwork:addPeripherals(id, peripherals)
 	assert(self:canAddPeripherals(id, peripherals))
 	local existing = self.database:get(id)
-	self:update(id, {
+	return self:update(id, {
 		peripherals = listUtil.combine(existing.peripherals, peripherals)
 	})
 end
@@ -142,7 +149,7 @@ function PeripheryNetwork:removePeripherals(id, peripherals)
 		end
 	end
 
-	self:update(id, {
+	return self:update(id, {
 		peripherals = resultingPeripherals
 	})
 end

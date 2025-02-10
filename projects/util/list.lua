@@ -1,3 +1,5 @@
+local tableUtil = require("util.table")
+
 local function contains(t, item)
 	for key in pairs(t) do
 		if t[key] == item then
@@ -68,6 +70,10 @@ local function insertAll(t, ...)
 	end
 end
 
+local function unique(t)
+	return tableUtil.keys(toSet(t))
+end
+
 return {
 	contains = contains,
 	map = map,
@@ -77,4 +83,5 @@ return {
 	find = find,
 	indexOf = indexOf,
 	insertAll = insertAll,
+	unique = unique
 }

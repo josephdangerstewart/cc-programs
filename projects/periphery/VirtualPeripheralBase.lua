@@ -7,18 +7,17 @@ local VirtualPeripheralBase = Classy:extend({
 	canConstruct = function(peripherals, options)
 		return true
 	end,
+	meta = {
+		name = "Virtual Peripheral",
+		description = "Please put a description of what this peripheral does"
+	},
 	name = "VirtualPeripheral"
 })
 
 function VirtualPeripheralBase:init(meta)
 	self.super:init()
 
-	self:initProperties({
-		meta = meta or {
-			name = "Virtual Peripheral",
-			description = "Please put a description of what this peripheral does"
-		}
-	})
+	self:initProperties()
 end
 
 function VirtualPeripheralBase:getMeta()

@@ -9,14 +9,15 @@ local ChestNetwork = VirtualPeripheralBase:extend({
 			matchers.requireChest("create:item_vault")
 		)
 	end,
+	meta = {
+		name = "Chest Network",
+		description = "A wrapper to treat multiple inventories as one (use an derived class for more specialized purposes such as input, output, and storage)",
+	},
 	name = "ChestNetwork"
 })
 
 function ChestNetwork:init(chests)
-	self.super:init({
-		name = "Chest Network",
-		description = "A wrapper to treat multiple inventories as one (use an derived class for more specialized purposes such as input, output, and storage)",
-	})
+	self.super:init()
 
 	chests = type(chests) == "table" and chests or {chests}
 

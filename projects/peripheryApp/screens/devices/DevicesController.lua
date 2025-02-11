@@ -35,7 +35,8 @@ function DevicesController:onShow()
 			:setBackground(colors.lightGray)
 			:onClick(function()
 				_self.app:changeScreen("device", {
-					id = i
+					id = i,
+					label = result.meta.name or ("Device " .. i)
 				})
 			end)
 

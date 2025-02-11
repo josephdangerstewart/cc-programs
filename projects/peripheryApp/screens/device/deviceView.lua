@@ -10,7 +10,7 @@ return function(owningFrame, controller)
 			controller:back()
 		end)
 
-	owningFrame
+	local label = owningFrame
 		:addLabel()
 		:setText("Device")
 		:setPosition(3, 1)
@@ -33,6 +33,7 @@ return function(owningFrame, controller)
 		:setBackground(colors.white)
 
 	return {
-		content = content
+		content = content,
+		label = label
 	}
 end

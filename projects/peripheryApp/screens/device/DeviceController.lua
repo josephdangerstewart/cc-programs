@@ -8,7 +8,13 @@ function DeviceController:init(owningFrame, appController)
 
 	self:initProperties({
 		app = appController,
+		id = nil,
 	})
+end
+
+function DeviceController:onShow(options)
+	self.id = options.id
+	self.view.label:setText(options.label or ("Device " .. options.id))
 end
 
 function DeviceController:back()

@@ -21,6 +21,7 @@ end
 function DevicesController:onShow()
 	local results = self.app.periphery:list()
 	self.view.devicesContainer:removeChildren()
+	local _self = self
 
 	local y = 1
 
@@ -33,7 +34,9 @@ function DevicesController:onShow()
 			:setPosition("parent.w / 2 - self.w / 2", y)
 			:setBackground(colors.lightGray)
 			:onClick(function()
-				basalt.debug("new peripheral")
+				_self.app:changeScreen("device", {
+					id = i
+				})
 			end)
 
 		y = y + 4

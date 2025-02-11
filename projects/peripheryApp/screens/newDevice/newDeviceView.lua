@@ -1,5 +1,4 @@
 local CheckboxList = require("ui.CheckboxList")
-local basalt = require("lib.basalt")
 
 local centerX = "parent.w / 2 - self.w / 2"
 local formLeft = 8

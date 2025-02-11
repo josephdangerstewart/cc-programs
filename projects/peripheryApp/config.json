@@ -1,0 +1,10 @@
+{
+	"dependencies": [
+		"classy",
+		"periphery",
+		"mvc"
+	],
+	"entry": {
+		"fileName": "startup"
+	}
+}

@@ -51,4 +51,8 @@ function AppController:stopApp()
 	basalt.stop()
 end
 
+function AppController:startApp()
+	basalt.autoUpdate()
+end
+
 return AppController

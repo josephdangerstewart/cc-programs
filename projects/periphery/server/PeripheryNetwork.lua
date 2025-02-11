@@ -26,36 +26,39 @@ function PeripheryNetwork:init(...)
 end
 
 function PeripheryNetwork:get(peripheralId)
+	local dbPeripheral = self.database:get(peripheralId)
+
+	if not dbPeripheral then
+		return nil
+	end
+
 	-- If we've already constructed this peripheral, return that
 	if self.virtualPeripherals[peripheralId] then
-		return self.virtualPeripherals[peripheralId]
+		return self.virtualPeripherals[peripheralId], dbPeripheral.meta
 	end
 
-	-- Otherwise, check if parameters exist for it in the database
-	local dbPeripheral = self.database:get(peripheralId)
-	if dbPeripheral then
-		local PeripheralType = self:_resolveNameOrType(dbPeripheral.type)
-		local instance = PeripheralType:new(dbPeripheral.peripherals, dbPeripheral.options, self)
-		instance:setId(peripheralId)
-		self.virtualPeripherals[peripheralId] = instance
-		return instance
-	end
-
-	-- No such peripheral exists
-	return nil
+	-- Otherwise, construct a new virtual peripheral instance
+	local PeripheralType = self:_resolveNameOrType(dbPeripheral.type)
+	local instance = PeripheralType:new(dbPeripheral.peripherals, dbPeripheral.options, self)
+	instance:setId(peripheralId)
+	self.virtualPeripherals[peripheralId] = instance
+	return instance, dbPeripheral.meta
 end
 
 function PeripheryNetwork:list(typeFilter)
 	local results = {}
 	for id in self.database:enumerateAll() do
-		local existing = self:get(id)
+		local existing, meta = self:get(id)
 
 		if
 			(not typeFilter) or
 			(type(typeFilter) == "string" and existing and existing.name == typeFilter) or
 			(existing and existing:isType(typeFilter))
 		then
-			results[id] = existing
+			results[id] = {
+				virtualPeripheral = existing,
+				meta = meta,
+			}
 		end
 	end
 
@@ -82,7 +85,9 @@ function PeripheryNetwork:create(nameOrType, peripherals, options, meta)
 		type = PeripheralType.name,
 		peripherals = listUtil.unique(peripherals),
 		options = options or {},
-		meta = meta or {},
+		meta = meta or {
+			name = "Virtual Peripheral",
+		},
 	})
 
 	return id, self:get(id)

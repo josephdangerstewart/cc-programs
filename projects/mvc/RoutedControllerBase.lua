@@ -45,6 +45,7 @@ function RoutedControllerBase:registerScreen(controllerClass, screenName)
 	local screenFrame = self.view.rootFrame
 		:addFrame()
 		:setBackground(colors.white)
+		:setSize("parent.w", "parent.h")
 	
 	local controller = controllerClass:new(screenFrame, self)
 

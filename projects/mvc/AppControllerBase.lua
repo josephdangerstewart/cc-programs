@@ -1,8 +1,8 @@
 local basalt = require("lib.basalt")
-local ControllerBase = require("mvc.ControllerBase")
+local RoutedControllerBase = require("mvc.RoutedControllerBase")
 local appView = require("mvc.appView")
 
-local AppController = ControllerBase:extendWithView(appView)
+local AppController = RoutedControllerBase:extendWithView(appView)
 
 function AppController:init()
 	local rootFrame = basalt.createFrame()

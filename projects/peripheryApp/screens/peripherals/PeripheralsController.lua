@@ -12,6 +12,12 @@ function PeripheralsController:init(owningFrame, appController)
 	})
 end
 
+function PeripheralsController:getNavButton()
+	return {
+		text = "Devices"
+	}
+end
+
 function PeripheralsController:onShow()
 	local results = self.app.periphery:list()
 	self.view.peripheralsContainer:removeChildren()
@@ -22,6 +28,7 @@ function PeripheralsController:onShow()
 			:addButton()
 			:setText(result.meta.name or ("Device " .. i))
 			:setSize(string.len(label) + 2, 3)
+			:setBackground(colors.lightGray)
 			:onClick(function()
 				basalt.debug("new peripheral")
 			end)

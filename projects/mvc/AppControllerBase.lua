@@ -28,7 +28,7 @@ end
 
 function AppController:onChangeScreen(controller, screenName)
 	if type(self.navMenuIndexes[screenName]) == "number" then
-		self.view.navMenu:selectItem(self.navMenuIndexes[screenName].navMenuIndex, false)
+		self.view.navMenu:selectItem(self.navMenuIndexes[screenName], false)
 	end
 end
 

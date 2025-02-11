@@ -201,7 +201,6 @@ function PeripheryNetwork:getVirtualPeripheralType(typeIdentifier)
 	local typeName = typeIdentifier
 	if type(typeIdentifier) == "table" and typeIdentifier:isType(VirtualPeripheralBase) then
 		local id = typeIdentifier:getId()
-		print("id! " .. (id or ""))
 		if id ~= nil then
 			local record = self.database:get(id)
 			typeName = record and record.type

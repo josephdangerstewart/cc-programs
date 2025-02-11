@@ -27,19 +27,16 @@ function DeviceController:onShow(options)
 
 	self.device = self.app.periphery:get(options.id)
 	if not self.device then
-		basalt.debug("no device for " .. options.id)
 		return
 	end
 
 	self.deviceType = self.app.periphery:getVirtualPeripheralType(self.device)
 	if not self.deviceType then
-		basalt.debug("no device type for " .. self.device:getId())
 		return
 	end
 
 	local UIController = peripheryUis[self.deviceType.name]
 	if not UIController then
-		basalt.debug("no ui controller for " .. self.deviceType.name)
 		return
 	end
 

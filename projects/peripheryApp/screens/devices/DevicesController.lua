@@ -1,10 +1,10 @@
 local ControllerBase = require("mvc.ControllerBase")
-local view = require("peripheryApp.screens.peripherals.peirpheralsView")
+local view = require("peripheryApp.screens.devices.devicesView")
 local basalt = require("lib.basalt")
 
-local PeripheralsController = ControllerBase:extendWithView(view)
+local DevicesController = ControllerBase:extendWithView(view)
 
-function PeripheralsController:init(owningFrame, appController)
+function DevicesController:init(owningFrame, appController)
 	self.super:init(owningFrame)
 
 	self:initProperties({
@@ -12,19 +12,19 @@ function PeripheralsController:init(owningFrame, appController)
 	})
 end
 
-function PeripheralsController:getNavButton()
+function DevicesController:getNavButton()
 	return {
 		text = "Devices"
 	}
 end
 
-function PeripheralsController:onShow()
+function DevicesController:onShow()
 	local results = self.app.periphery:list()
-	self.view.peripheralsContainer:removeChildren()
+	self.view.devicesContainer:removeChildren()
 
 	for i,result in pairs(results) do
 		local label = result.meta.name or ("Device " .. i)
-		self.view.peripheralsContainer
+		self.view.devicesContainer
 			:addButton()
 			:setText(result.meta.name or ("Device " .. i))
 			:setSize(string.len(label) + 2, 3)
@@ -35,8 +35,8 @@ function PeripheralsController:onShow()
 	end
 end
 
-function PeripheralsController:newPeripheral()
-	basalt.debug("new peripheral")
+function DevicesController:newDevice()
+	self.app:changeScreen("newDevice")
 end
 
-return PeripheralsController
+return DevicesController

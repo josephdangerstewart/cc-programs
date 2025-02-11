@@ -1,8 +1,10 @@
 local AppController = require("peripheryApp.AppController")
-local PeripheralsScreen = require("peripheryApp.screens.peripherals")
+local DevicesController = require("peripheryApp.screens.devices")
+local NewDeviceController = require("peripheryApp.screens.newDevice")
 
 local app = AppController:new()
 
-app:registerScreen(PeripheralsScreen, "peripherals")
+app:registerScreen(DevicesController, "devices")
+app:registerScreen(NewDeviceController, "newDevice")
 
 app:startApp()

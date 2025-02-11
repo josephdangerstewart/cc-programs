@@ -1,5 +1,5 @@
 return function(owningFrame, controller)
-	local peripheralsContainer = owningFrame
+	local devicesContainer = owningFrame
 		:addFlexbox()
 		:setBackground(colors.white)
 		:setWrap("wrap")
@@ -13,10 +13,10 @@ return function(owningFrame, controller)
 		:setText("New +")
 		:setBackground(colors.lightGray)
 		:onClick(function()
-			controller:newPeripheral()
+			controller:newDevice()
 		end)
 
 	return {
-		peripheralsContainer = peripheralsContainer
+		devicesContainer = devicesContainer
 	}
 end

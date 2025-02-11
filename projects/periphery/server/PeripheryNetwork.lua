@@ -173,13 +173,15 @@ function PeripheryNetwork:getAttachedPeripherals(id)
 	return (existing and existing.peripherals) or {}
 end
 
-function PeripheryNetwork:listUnclaimedPeripherals()
+function PeripheryNetwork:listUnclaimedPeripherals(typeFilter)
 	local allPeripherals = peripheral.getNames()
 	local claimedPeripherals = listUtil.toSet(self:_getClaimedPeripherals())
 
+	local TypeToFilterTo = typeFilter and self:_resolveNameOrType(typeFilter) or nil
+
 	local results = {}
 	for i, peripheralName in pairs(allPeripherals) do
-		if not claimedPeripherals[peripheralName] then
+		if not claimedPeripherals[peripheralName] and (not TypeToFilterTo or self:_isValidConstruction(TypeToFilterTo, {peripheralName})) then
 			table.insert(results, peripheralName)
 		end
 	end

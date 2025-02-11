@@ -30,4 +30,9 @@ function UIElementControllerBase:setSize(w, h)
 	return self
 end
 
+function UIElementControllerBase:setBackground(color)
+	self.rootElement:setBackground(color)
+	return self
+end
+
 return UIElementControllerBase

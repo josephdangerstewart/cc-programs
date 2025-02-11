@@ -1,8 +1,7 @@
 return function(owningFrame, controller)
 	local devicesContainer = owningFrame
-		:addFlexbox()
+		:addScrollableFrame()
 		:setBackground(colors.white)
-		:setWrap("wrap")
 		:setPosition(1, 1)
 		:setSize("parent.w", "parent.h - 1")
 

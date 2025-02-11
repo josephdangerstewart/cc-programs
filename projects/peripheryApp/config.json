@@ -2,7 +2,8 @@
 	"dependencies": [
 		"classy",
 		"periphery",
-		"mvc"
+		"mvc",
+		"ui"
 	],
 	"entry": {
 		"fileName": "startup"

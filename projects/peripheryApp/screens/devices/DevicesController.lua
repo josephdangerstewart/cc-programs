@@ -22,17 +22,23 @@ function DevicesController:onShow()
 	local results = self.app.periphery:list()
 	self.view.devicesContainer:removeChildren()
 
+	local y = 1
+
 	for i,result in pairs(results) do
 		local label = result.meta.name or ("Device " .. i)
 		self.view.devicesContainer
 			:addButton()
 			:setText(result.meta.name or ("Device " .. i))
 			:setSize(string.len(label) + 2, 3)
+			:setPosition("parent.w / 2 - self.w / 2", y)
 			:setBackground(colors.lightGray)
 			:onClick(function()
 				basalt.debug("new peripheral")
 			end)
+
+		y = y + 4
 	end
+
 end
 
 function DevicesController:newDevice()

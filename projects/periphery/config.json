@@ -3,6 +3,7 @@
 		"classy",
 		"util",
 		"data",
-		"rtp"
+		"rtp",
+		"mvc"
 	]
 }

@@ -33,6 +33,9 @@ return function(owningFrame, controller)
 		:setBackground(colors.gray)
 		:setForeground(colors.white)
 		:setInputType("number")
+		:onChange(function()
+			controller:handleFormChange()
+		end)
 
 	owningFrame
 		:addLabel()
@@ -44,6 +47,9 @@ return function(owningFrame, controller)
 		:setSize("parent.w - 2", 1)
 		:setForeground(colors.white)
 		:setPosition(2, 9)
+		:onChange(function()
+			controller:handleFormChange()
+		end)
 
 	local submitButton = owningFrame
 		:addButton()

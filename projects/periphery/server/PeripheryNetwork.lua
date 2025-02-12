@@ -47,13 +47,13 @@ end
 
 function PeripheryNetwork:list(typeFilter)
 	local results = {}
-	for id in self.database:enumerateAll() do
+	for id, record in self.database:enumerateAll() do
 		local existing, meta = self:get(id)
 
 		if
 			(not typeFilter) or
-			(type(typeFilter) == "string" and existing and existing.name == typeFilter) or
-			(existing and existing:isType(typeFilter))
+			(type(typeFilter) == "string" and record.type == typeFilter) or
+			(existing and Classy:isClass(typeFilter) and existing:isType(typeFilter))
 		then
 			results[id] = {
 				virtualPeripheral = existing,

@@ -62,7 +62,7 @@ function DeviceController:onShow(options)
 		:setBackground(colors.white)
 
 	self.deviceController = UIController
-		:new(self.deviceFrame, self, self.device)
+		:new(self.deviceFrame, self)
 
 	if self.deviceController.onShow then
 		self.deviceController:onShow()

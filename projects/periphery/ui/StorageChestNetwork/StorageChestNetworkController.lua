@@ -4,11 +4,13 @@ local ItemDetailsSidebar = require("periphery.ui.StorageChestNetwork.ItemDetails
 
 local StorageChestNetworkController = ControllerBase:extendWithView(view)
 
-function StorageChestNetworkController:init(owningFrame, storageController)
+function StorageChestNetworkController:init(owningFrame, parent)
 	self.super:init(owningFrame)
 
 	self:initProperties({
-		storageController = storageController,
+		parent = parent,
+		device = parent.device,
+		periphery = parent.app.periphery,
 	})
 end
 
@@ -27,7 +29,7 @@ end
 
 function StorageChestNetworkController:openItemSidebar(item)
 	self.view.itemDetailSidebar:removeChildren()
-	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self, self.storageController.device:list()[item])
+	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self, self.device:list()[item])
 
 	self.view.itemDetailSidebar:show()
 	local sidebarWidth = self.view.itemDetailSidebar:getSize()
@@ -35,7 +37,7 @@ function StorageChestNetworkController:openItemSidebar(item)
 end
 
 function StorageChestNetworkController:refresh(force)
-	local items = self.storageController.device:list(force)
+	local items = self.device:list(force)
 
 	local results = {}
 	for i,item in pairs(items) do

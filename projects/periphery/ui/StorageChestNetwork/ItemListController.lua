@@ -13,11 +13,22 @@ function ItemListController:init(owningFrame, storageController)
 end
 
 function ItemListController:onSelect(item)
-	self.storageController:changeScreen("itemDetail", item)
+	self:openItemSidebar()
 end
 
 function ItemListController:onShow()
 	self:refresh()
+end
+
+function ItemListController:closeItemSidebar()
+	self.view.itemDetailSidebar:hide()
+	self.view.mainContentFrame:setSize("parent.w", "parent.h")
+end
+
+function ItemListController:openItemSidebar()
+	self.view.itemDetailSidebar:show()
+	local sidebarWidth = self.view.itemDetailSidebar:getSize()
+	self.view.mainContentFrame:setSize("parent.w - " .. sidebarWidth, "parent.h")
 end
 
 function ItemListController:refresh(force)

@@ -20,6 +20,11 @@ end
 
 function ItemDetailsSidebarController:refresh()
 	self.view.nameLabel:setText(self.item.name)
+	self.view.countLabel:setText("Count: " .. self.item.count)
+end
+
+function ItemDetailsSidebarController:submit()
+	self.parent:closeItemSidebar()
 end
 
 return ItemDetailsSidebarController

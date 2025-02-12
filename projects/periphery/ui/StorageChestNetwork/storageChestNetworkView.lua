@@ -1,4 +1,5 @@
 local ColumnList = require("ui.ColumnList")
+local ComboBox = require("ui.ComboBox")
 
 return function(owningFrame, controller)
 	owningFrame
@@ -42,6 +43,24 @@ return function(owningFrame, controller)
 		:setForeground(colors.gray)
 		:onClick(function()
 			controller:closeItemSidebar()
+		end)
+
+	ComboBox
+		:new(itemDetailSidebar)
+		:setPosition(2, 3)
+		:setButtonText("Take")
+		:onSubmit(function()
+			controller:closeItemSidebar()
+		end)
+		:setItems(function()
+			return {
+				{
+					text = "Option 1",
+				},
+				{
+					text = "Option 2",
+				},
+			}
 		end)
 
 	return {

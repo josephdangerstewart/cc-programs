@@ -10,6 +10,11 @@ local function stringEndsWith(s, frag)
 	return string.sub(s, string.len(frag) * -1, -1) == frag
 end
 
+local function generateId()
+	local result = math.random() .. "" .. os.getComputerID() .. os.clock()
+	return "item" .. string.gsub(result, "%.", "")
+end
+
 local function wrapFrameWithChildrenObserver(frame, onAddObject, onRemoveObject)
 	local result = {}
 	setmetatable(result, {
@@ -101,4 +106,5 @@ return {
 	extend = extend,
 	wrapFrameWithChildrenObserver = wrapFrameWithChildrenObserver,
 	disableFunctions = disableFunctions,
+	generateId = generateId,
 }

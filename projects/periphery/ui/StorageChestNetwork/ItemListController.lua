@@ -13,7 +13,7 @@ function ItemListController:init(owningFrame, storageController)
 end
 
 function ItemListController:onSelect(item)
-	basalt.debug(item)
+	self.storageController:changeScreen("itemDetail", item)
 end
 
 function ItemListController:onShow()

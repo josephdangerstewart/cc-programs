@@ -1,27 +1,34 @@
 return function(owningFrame, controller)
-	owningFrame
+	local toolbar = owningFrame
+		:addFrame()
+		:setSize("parent.w", 1)
+		:setPosition(1, 1)
+		:setBackground(colors.gray)
+
+	toolbar
 		:addButton()
 		:setText("<")
 		:setSize(1, 1)
 		:setPosition(1, 1)
-		:setBackground(colors.white)
-		:setForeground(colors.black)
+		:setBackground(colors.gray)
+		:setForeground(colors.lightGray)
 		:onClick(function()
 			controller:back()
 		end)
 
-	local label = owningFrame
+	local label = toolbar
 		:addLabel()
 		:setText("Device")
+		:setForeground(colors.lightGray)
 		:setPosition(3, 1)
 
-	owningFrame
+	toolbar
 		:addButton()
 		:setText("Settings")
 		:setSize(10, 1)
 		:setPosition("parent.w - self.w + 1", 1)
 		:setBackground(colors.gray)
-		:setForeground(colors.white)
+		:setForeground(colors.lightGray)
 		:onClick(function()
 			controller:settings()
 		end)

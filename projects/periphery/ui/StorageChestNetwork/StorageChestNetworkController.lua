@@ -13,7 +13,7 @@ function StorageChestNetworkController:init(owningFrame, storageController)
 end
 
 function StorageChestNetworkController:onSelect(item)
-	self:openItemSidebar()
+	self:openItemSidebar(item)
 end
 
 function StorageChestNetworkController:onShow()
@@ -25,9 +25,9 @@ function StorageChestNetworkController:closeItemSidebar()
 	self.view.mainContentFrame:setSize("parent.w", "parent.h")
 end
 
-function StorageChestNetworkController:openItemSidebar()
+function StorageChestNetworkController:openItemSidebar(item)
 	self.view.itemDetailSidebar:removeChildren()
-	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self)
+	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self, self.storageController.device:list()[item])
 
 	self.view.itemDetailSidebar:show()
 	local sidebarWidth = self.view.itemDetailSidebar:getSize()
@@ -41,7 +41,8 @@ function StorageChestNetworkController:refresh(force)
 	for i,item in pairs(items) do
 		results[i] = {
 			text = item.name,
-			subText = "x" .. item.count
+			subText = "x" .. item.count,
+			item = item,
 		}
 	end
 

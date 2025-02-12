@@ -9,4 +9,13 @@ return function(owningFrame, controller)
 		:onClick(function()
 			controller:close()
 		end)
+
+	local label = owningFrame
+		:addLabel()
+		:setText("Item Name")
+		:setPosition(3, 1)
+
+	return {
+		label = label,
+	}
 end

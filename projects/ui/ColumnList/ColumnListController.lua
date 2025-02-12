@@ -17,19 +17,22 @@ function ColumnListController:onSelect(handler)
 	return self
 end
 
+function ColumnListController:clear()
+	self:setItems({})
+end
+
 function ColumnListController:setItems(items)
 	for i,label in ipairs(self.labels) do
 		label:remove()
 	end
 	self.labels = {}
 
-	local width, height = self.view.scrollingFrame:getContentSize()
+	local width, height = self.view.scrollingFrame:getSize()
 
 	local column = 1
 	local row = 1
 	local maxWidth = 0
 
-	self.view.scrollingFrame:pauseAutoScroll()
 	for key, item in pairs(items) do
 		local text = item.text
 		local subText = item.subText and " " .. item.subText
@@ -40,13 +43,16 @@ function ColumnListController:setItems(items)
 			end
 		end
 
-		local countLabel = self.view.scrollingFrame
-			:addLabel()
-			:setSize(#subText, 1)
-			:setPosition(column + #text, row)
-			:setForeground(colors.lightGray)
-			:setText(subText)
-			:onClick(handleTextClick)
+		local countLabel
+		if subText then
+			countLabel = self.view.scrollingFrame
+				:addLabel()
+				:setSize(#subText, 1)
+				:setPosition(column + #text, row)
+				:setForeground(colors.lightGray)
+				:setText(subText)
+				:onClick(handleTextClick)
+		end
 
 		local nameLabel = self.view.scrollingFrame
 			:addLabel()
@@ -67,7 +73,6 @@ function ColumnListController:setItems(items)
 			maxWidth = 0
 		end
 	end
-	self.view.scrollingFrame:resumeAutoScroll()
 
 	return self
 end

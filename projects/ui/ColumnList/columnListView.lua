@@ -1,7 +1,8 @@
-local HorizontalScrollingFrameController = require("ui.HorizontalScrollingFrame")
+return function(owningFrame)
+	local scrollingFrame = owningFrame
+		:addScrollableFrame()
+		:setBackground(colors.white)
 
-return function(owningFrame, controller)
-	local scrollingFrame = HorizontalScrollingFrameController:new(owningFrame)
 	return {
 		scrollingFrame = scrollingFrame,
 		rootElement = scrollingFrame,

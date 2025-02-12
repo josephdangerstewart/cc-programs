@@ -44,8 +44,8 @@ function ChestNetwork:refresh()
 	self:_clearCache()
 end
 
-function ChestNetwork:list()
-	return self:_scanInventory()
+function ChestNetwork:list(force)
+	return self:_scanInventory(force)
 end
 
 function ChestNetwork:giveItem(itemName, count, destination)
@@ -72,7 +72,6 @@ function ChestNetwork:_getChestNetwork(chestOrNetwork)
 		end
 	end
 
-	print("resolving", chestOrNetwork)
 	if type(chestOrNetwork) == "table" and chestOrNetwork:isType(ChestNetwork) then
 		return chestOrNetwork
 	end
@@ -185,8 +184,8 @@ function ChestNetwork:_clearCache()
 	self.cachedInventory = nil
 end
 
-function ChestNetwork:_scanInventory()
-	if self.cachedInventory ~= nil then
+function ChestNetwork:_scanInventory(force)
+	if self.cachedInventory ~= nil and not force then
 		return self.cachedInventory
 	end
 

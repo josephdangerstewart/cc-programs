@@ -1,6 +1,6 @@
 local ControllerBase = require("mvc.ControllerBase")
 local view = require("periphery.ui.StorageChestNetwork.storageChestNetworkView")
-local basalt = require("lib.basalt")
+local ItemDetailsSidebar = require("periphery.ui.StorageChestNetwork.ItemDetailsSidebarController")
 
 local StorageChestNetworkController = ControllerBase:extendWithView(view)
 
@@ -26,6 +26,9 @@ function StorageChestNetworkController:closeItemSidebar()
 end
 
 function StorageChestNetworkController:openItemSidebar()
+	self.view.itemDetailSidebar:removeChildren()
+	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self)
+
 	self.view.itemDetailSidebar:show()
 	local sidebarWidth = self.view.itemDetailSidebar:getSize()
 	self.view.mainContentFrame:setSize("parent.w - " .. sidebarWidth, "parent.h")

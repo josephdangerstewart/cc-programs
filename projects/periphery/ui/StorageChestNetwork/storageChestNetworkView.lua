@@ -34,35 +34,6 @@ return function(owningFrame, controller)
 		:setPosition("parent.w - self.w + 1", 1)
 		:hide()
 
-	itemDetailSidebar
-		:addButton()
-		:setText("X")
-		:setSize(1, 1)
-		:setPosition(1, 1)
-		:setBackground(colors.lightGray)
-		:setForeground(colors.gray)
-		:onClick(function()
-			controller:closeItemSidebar()
-		end)
-
-	ComboBox
-		:new(itemDetailSidebar)
-		:setPosition(2, 3)
-		:setButtonText("Take")
-		:onSubmit(function()
-			controller:closeItemSidebar()
-		end)
-		:setItems(function()
-			return {
-				{
-					text = "Option 1",
-				},
-				{
-					text = "Option 2",
-				},
-			}
-		end)
-
 	return {
 		itemList = itemList,
 		mainContentFrame = mainContentFrame,

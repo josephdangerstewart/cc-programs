@@ -10,12 +10,12 @@ return function(owningFrame, controller)
 			controller:close()
 		end)
 
-	local label = owningFrame
+	local nameLabel = owningFrame
 		:addLabel()
 		:setText("Item Name")
 		:setPosition(3, 1)
 
 	return {
-		label = label,
+		nameLabel = nameLabel,
 	}
 end

@@ -11,11 +11,15 @@ function ItemDetailsSidebarController:init(owningFrame, parent, item)
 		item = item
 	})
 
-	self.view.label:setText(item.name)
+	self:refresh()
 end
 
 function ItemDetailsSidebarController:close()
 	self.parent:closeItemSidebar()
+end
+
+function ItemDetailsSidebarController:refresh()
+	self.view.nameLabel:setText(self.item.name)
 end
 
 return ItemDetailsSidebarController

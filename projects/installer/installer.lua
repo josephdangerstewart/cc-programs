@@ -9,7 +9,12 @@ local owner = "josephdangerstewart"
 assert(project, "usage: installer <project>")
 
 local function fetch(url)
-	local request = http.get(url)
+	local request, err, failedResponse = http.get(url)
+	if err then
+		local code = failedResponse.getResponseCode()
+		failedResponse.close()
+		error(code .. ": " .. err)
+	end
 	local result = request.readAll()
 	request.close()
 	return result

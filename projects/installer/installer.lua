@@ -63,7 +63,7 @@ local function downloadProject(projectName)
 		local fileName = config.entry.fileName or projectName
 
 		local file = fs.open(fileName .. ".lua", "w")
-		file.write("require(\"" .. projectName .. "/" .. runs .. ".lua\")")
+		file.write("require(\"" .. projectName .. "." .. runs .. "\")")
 	end
 end
 

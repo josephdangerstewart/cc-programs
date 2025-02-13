@@ -129,7 +129,7 @@ end
 
 function PeripheryNetwork:getDeviceMeta(id)
 	local record = self.database:get(id)
-	return record and record.meta
+	return record and record.meta, record and record.type
 end
 
 function PeripheryNetwork:canAddPeripherals(id, peripherals)
@@ -173,7 +173,7 @@ function PeripheryNetwork:removePeripherals(id, peripherals)
 	})
 end
 
-function PeripheryNetwork:getAttachedPeripherals(id)
+function PeripheryNetwork:listAttachedPeripherals(id)
 	local existing = self.database:get(id)
 	return (existing and existing.peripherals) or {}
 end

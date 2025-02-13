@@ -57,6 +57,14 @@ local function downloadProject(projectName)
 			downloadProject(dependency)
 		end
 	end
+
+	if config.entry then
+		local runs = config.entry.runs or "main"
+		local fileName = config.entry.fileName or projectName
+
+		local file = fs.open(fileName .. ".lua", "w")
+		file.write("require(" .. projectName .. "/" .. runs .. ".lua)")
+	end
 end
 
 downloadProject(project)

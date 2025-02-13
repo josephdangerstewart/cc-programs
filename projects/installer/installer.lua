@@ -43,7 +43,9 @@ end
 local processedProjects = {}
 
 local function downloadProject(projectName)
-	assert(not processedProjects[projectName], "dependencies contain recursive structure")
+	if processedProjects[projectName] then
+		return
+	end
 	processedProjects[projectName] = true
 
 	print("Downloading project " .. projectName)

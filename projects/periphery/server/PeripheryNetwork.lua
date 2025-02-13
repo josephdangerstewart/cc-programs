@@ -127,6 +127,11 @@ function PeripheryNetwork:delete(id)
 	self.database:delete(id)
 end
 
+function PeripheryNetwork:getDeviceMeta(id)
+	local record = self.database:get(id)
+	return record and record.meta
+end
+
 function PeripheryNetwork:canAddPeripherals(id, peripherals)
 	local existing = self.database:get(id)
 

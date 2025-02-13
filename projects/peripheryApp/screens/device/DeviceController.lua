@@ -22,7 +22,11 @@ end
 
 function DeviceController:onShow(options)
 	self.id = options.id
-	self.view.label:setText(options.label or ("Device " .. options.id))
+	local meta
+	if not options.label then
+		meta = self.app.periphery:getDeviceMeta(options.id)
+	end
+	self.view.label:setText(options.label or (meta and meta.name) or ("Device " .. options.id))
 
 	if self.deviceFrame then
 		self.deviceFrame:hide();

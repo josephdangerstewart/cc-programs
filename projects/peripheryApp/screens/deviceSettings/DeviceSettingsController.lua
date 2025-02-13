@@ -11,7 +11,19 @@ function DeviceSettingsController:init(owningFrame, appController)
 	})
 end
 
+function DeviceSettingsController:onShow(options)
+	self.device = options.device
+
+	local meta = self.app.periphery:getDeviceMeta(self.device:getId())
+	self.view.titleLabel:setText(meta and meta.name or "Device Settings")
+end
+
 function DeviceSettingsController:back()
+	self.app:changeScreen("device", { id = self.device:getId() })
+end
+
+function DeviceSettingsController:delete()
+	self.app.periphery:delete(self.device:getId())
 	self.app:changeScreen("devices")
 end
 

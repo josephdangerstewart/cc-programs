@@ -1,0 +1,7 @@
+{
+	"dependencies": [],
+	"entry": {
+		"fileName": "installer",
+		"runs": "installer"
+	}
+}

@@ -1,0 +1,55 @@
+-- Installs packages and dependencies from this repo
+
+local vargs = {...}
+local project = vargs[1]
+
+local repo = "cc-programs"
+local owner = "josephdangerstewart"
+
+assert(project, "usage: installer <project>")
+
+local function fetch(url)
+	local request = http.get(url)
+	local result = request.readAll()
+	request.close()
+	return result
+end
+
+local function fetchJson(url)
+	return textutils.unserialiseJSON(fetch(url))
+end
+
+local function downloadDirectory(directoryPath)
+	print("Downloading directory " .. directoryPath)
+	local children = fetchJson("https://api.github.com/repos/" .. owner .. "/" .. repo .. "/contents/projects/" .. directoryPath)
+	for i, v in pairs(children) do
+		if v.type == "file" then
+			print("Downloading file " .. v.name)
+			local fileContents = fetch(v.download_url)
+			local file = fs.open(directoryPath .. "/" .. v.name, "w")
+			file.write(fileContents)
+			file.close()
+		else
+			downloadDirectory(directoryPath .. "/" .. v.name)
+		end
+	end
+end
+
+local processedProjects = {}
+
+local function downloadProject(projectName)
+	assert(not processedProjects[projectName], "dependencies contain recursive structure")
+	processedProjects[projectName] = true
+
+	print("Downloading project " .. projectName)
+	local config = fetchJson("https://raw.githubusercontent.com/" .. owner .. "/" .. repo .. "/master/projects/" .. projectName .. "/config.json")
+	downloadDirectory(projectName)
+
+	if config.dependencies then
+		for i, dependency in pairs(config.dependencies) do
+			downloadProject(dependency)
+		end
+	end
+end
+
+downloadProject(project)

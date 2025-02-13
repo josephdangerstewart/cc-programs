@@ -5,12 +5,23 @@ return function(owningFrame, controller)
 	owningFrame
 		:addButton()
 		:setText("Refresh")
-		:setPosition(1, 1)
+		:setPosition(10, 1)
 		:setSize(7, 1)
 		:setBackground(colors.white)
 		:setForeground(colors.blue)
 		:onClick(function ()
 			controller:refresh(true)
+		end)
+
+	owningFrame
+		:addButton()
+		:setBackground(colors.blue)
+		:setForeground(colors.white)
+		:setText("Intake")
+		:setSize(8, 1)
+		:setPosition(1, 1)
+		:onClick(function()
+			controller:intake()
 		end)
 
 	local mainContentFrame = owningFrame

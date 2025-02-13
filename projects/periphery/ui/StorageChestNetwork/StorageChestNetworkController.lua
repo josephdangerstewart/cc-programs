@@ -1,4 +1,5 @@
 local ControllerBase = require("mvc.ControllerBase")
+local IOChest = require("periphery.types.IOChest")
 local view = require("periphery.ui.StorageChestNetwork.storageChestNetworkView")
 local ItemDetailsSidebar = require("periphery.ui.StorageChestNetwork.ItemDetailsSidebarController")
 
@@ -34,6 +35,14 @@ function StorageChestNetworkController:openItemSidebar(item)
 	self.view.itemDetailSidebar:show()
 	local sidebarWidth = self.view.itemDetailSidebar:getSize()
 	self.view.mainContentFrame:setSize("parent.w - " .. sidebarWidth, "parent.h")
+end
+
+function StorageChestNetworkController:intake()
+	local ioChests = self.periphery:list(IOChest.name)
+
+	for i, chest in pairs(ioChests) do
+		chest.virtualPeripheral:intake(self.device)
+	end
 end
 
 function StorageChestNetworkController:refresh(force)

@@ -77,7 +77,7 @@ function DeviceController:back()
 end
 
 function DeviceController:settings()
-	self:back()
+	self.app:changeScreen("deviceSettings", { device = self.device })
 end
 
 return DeviceController

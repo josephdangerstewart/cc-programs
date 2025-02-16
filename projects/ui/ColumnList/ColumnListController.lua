@@ -1,5 +1,6 @@
 local UIElementControllerBase = require("mvc.UIElementControllerBase")
 local initView = require("ui.ColumnList.columnListView")
+local basalt = require("lib.basalt")
 
 local ColumnListController = UIElementControllerBase:extendWithView(initView)
 
@@ -27,7 +28,7 @@ function ColumnListController:setItems(items)
 	end
 	self.labels = {}
 
-	local width, height = self.view.scrollingFrame:getSize()
+	local height = self.view.scrollingFrame:getHeight()
 
 	local column = 1
 	local row = 1
@@ -74,7 +75,26 @@ function ColumnListController:setItems(items)
 		end
 	end
 
+	self:_measureChildren()
 	return self
+end
+
+function ColumnListController:getScrollAmount()
+	return self.scrollAmount or 0
+end
+
+function ColumnListController:_measureChildren()
+	local maxX = 0
+	local containerWidth = self.view.scrollingFrame:getWidth()
+
+	for i,child in pairs(self.view.scrollingFrame:getChildren()) do
+		local x = child.element:getX()
+		local width = child.element:getWidth()
+		maxX = math.max(maxX, x + width)
+	end
+
+	self.scrollAmount = maxX - containerWidth
+	self.view.scrollBar:setScrollAmount(self.scrollAmount)
 end
 
 return ColumnListController

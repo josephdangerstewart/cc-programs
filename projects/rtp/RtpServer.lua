@@ -69,7 +69,7 @@ function RtpServer:_runListener(hostname)
 		print("Listening on "..os.getComputerID()..(hostname and " host = "..hostname or ""))
 		while true do
 			local id, message = rednet.receive("rtp:request")
-			self.requestWorker:queueWork(id, message)
+			_self.requestWorker:queueWork(id, message)
 		end
 	end
 end

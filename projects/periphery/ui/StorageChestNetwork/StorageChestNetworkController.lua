@@ -25,7 +25,7 @@ end
 
 function StorageChestNetworkController:closeItemSidebar()
 	self.view.itemDetailSidebar:hide()
-	self.view.mainContentFrame:setSize("parent.w", "parent.h")
+	self.view.mainContentFrame:setSize("parent.w", "parent.h - 1")
 end
 
 function StorageChestNetworkController:openItemSidebar(item)
@@ -34,7 +34,7 @@ function StorageChestNetworkController:openItemSidebar(item)
 
 	self.view.itemDetailSidebar:show()
 	local sidebarWidth = self.view.itemDetailSidebar:getSize()
-	self.view.mainContentFrame:setSize("parent.w - " .. sidebarWidth, "parent.h")
+	self.view.mainContentFrame:setSize("parent.w - " .. sidebarWidth, "parent.h - 1")
 end
 
 function StorageChestNetworkController:intake()

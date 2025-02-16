@@ -75,7 +75,7 @@ function ColumnListController:setItems(items)
 		end
 	end
 
-	self:_measureChildren()
+	self:measureChildren()
 	return self
 end
 
@@ -83,7 +83,7 @@ function ColumnListController:getScrollAmount()
 	return self.scrollAmount or 0
 end
 
-function ColumnListController:_measureChildren()
+function ColumnListController:measureChildren()
 	local maxX = 0
 	local containerWidth = self.view.scrollingFrame:getWidth()
 

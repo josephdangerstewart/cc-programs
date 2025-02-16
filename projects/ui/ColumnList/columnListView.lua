@@ -20,6 +20,9 @@ return function(owningFrame, controller)
 			local index = math.max(0, math.min(controller:getScrollAmount() + 1, scrollingFrame:getOffset() + direction + 1))
 			scrollBar:setIndex(index)
 		end)
+		:onResize(function ()
+			controller:measureChildren()
+		end)
 
 	scrollBar
 		:setBarType("horizontal")

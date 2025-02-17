@@ -106,22 +106,30 @@ function ChestNetwork:_transfer(
 		return false, "source inventory does not have item in requested quantity"
 	end
 
-	-- TODO: iterate items out of fromNetwork into toNetwork until count is met or toNetwork is full
 	local remaining = count
 	local targetLocationIterator = toNetwork:_iterateTargetLocations(item)
 	local destinationChest, destinationSlot = targetLocationIterator()
 
 	for sourceChest, sourceSlot in fromNetwork:_iterateSourceLocations(item) do
+		if remaining <= 0 then
+			break
+		end
+
 		if not destinationChest then
 			return false, "Destination is full"
 		end
 
 		local wrappedDestination = peripheral.wrap(destinationChest)
-		print(destinationChest, peripheral.wrap(sourceChest))
-		remaining = remaining - wrappedDestination.pullItems(sourceChest, sourceSlot, remaining, destinationSlot)
+		local pulled = wrappedDestination.pullItems(sourceChest, sourceSlot, remaining, destinationSlot)
 
-		fromNetwork:refresh()
-		toNetwork:refresh()
+		if pulled > 0 then
+			remaining = remaining - pulled
+
+			fromNetwork:refresh()
+			toNetwork:refresh()
+		else
+			destinationChest = targetLocationIterator()
+		end
 	end
 
 	if remaining > 0 then

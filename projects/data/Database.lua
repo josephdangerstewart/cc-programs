@@ -36,7 +36,6 @@ function Database:update(id, newData)
 		return false, "No such record"
 	end
 
-	print(id, newData)
 	fileContents.data[id] = newData
 
 	self:_writeFileContents(fileContents)

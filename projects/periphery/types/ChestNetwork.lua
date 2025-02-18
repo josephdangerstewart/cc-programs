@@ -1,6 +1,7 @@
 local VirtualPeripheralBase = require("periphery.VirtualPeripheralBase")
 local matchers = require("periphery.peripheralMatchers")
 local nbtUtil = require("util.nbt")
+local tableUtil = require("util.table")
 
 local ChestNetwork = VirtualPeripheralBase:extend({
 	getPeripheralValidator = function()
@@ -106,29 +107,30 @@ function ChestNetwork:_transfer(
 		return false, "source inventory does not have item in requested quantity"
 	end
 
+	local destinationIterator = toNetwork:_iterateTargetLocations(item)
+	local sourceIterator = fromNetwork:_iterateSourceLocations(item)
+
+	local destinationChest, destinationSlot = destinationIterator()
+	local sourceChest, sourceSlot, sourceCount = sourceIterator()
 	local remaining = count
-	local targetLocationIterator = toNetwork:_iterateTargetLocations(item)
-	local destinationChest, destinationSlot = targetLocationIterator()
 
-	for sourceChest, sourceSlot in fromNetwork:_iterateSourceLocations(item) do
-		if remaining <= 0 then
-			break
-		end
-
-		if not destinationChest then
-			return false, "Destination is full"
-		end
-
+	while destinationChest and sourceChest and remaining > 0 do
+		print("s", sourceChest, sourceSlot)
 		local wrappedDestination = peripheral.wrap(destinationChest)
 		local pulled = wrappedDestination.pullItems(sourceChest, sourceSlot, remaining, destinationSlot)
 
 		if pulled > 0 then
 			remaining = remaining - pulled
+			sourceCount = sourceCount - pulled
 
 			fromNetwork:refresh()
 			toNetwork:refresh()
+
+			if sourceCount <= 0 then
+				sourceChest, sourceSlot, sourceCount = sourceIterator()
+			end
 		else
-			destinationChest = targetLocationIterator()
+			destinationChest, destinationSlot = destinationIterator()
 		end
 	end
 
@@ -147,7 +149,8 @@ end
 function ChestNetwork:_iterateTargetLocations(itemName)
 	local existingSlotIterator = self:_iterateItemLocations(itemName)
 	local chests = self.chests
-	local chestIterator = {pairs(chests)}
+	local chestNames = tableUtil.keys(self.chests)
+	local chestNameIndex = 0
 
 	return function()
 		for chestName, slot, count in existingSlotIterator do
@@ -157,9 +160,8 @@ function ChestNetwork:_iterateTargetLocations(itemName)
 			end
 		end
 
-		for chestName in table.unpack(chestIterator) do
-			return chestName
-		end
+		chestNameIndex = chestNameIndex + 1
+		return chestNames[chestNameIndex]
 	end
 end
 
@@ -184,6 +186,7 @@ function ChestNetwork:_iterateItemLocations(itemName)
 			perSlotLimit = detail.maxCount
 		end
 
+		print("si", location.chestName, location.index)
 		return location.chestName, location.index, location.count
 	end
 end

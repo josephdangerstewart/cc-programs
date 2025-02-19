@@ -13,7 +13,8 @@ function StorageChestNetworkController:init(owningFrame, parent)
 		parent = parent,
 		device = parent.device,
 		periphery = parent.app.periphery,
-		sortProperty = "name"
+		sortProperty = "name",
+		search = ""
 	})
 end
 
@@ -52,7 +53,9 @@ function StorageChestNetworkController:refresh(force)
 
 	local sortedItems = {}
 	for i,item in pairs(items) do
-		table.insert(sortedItems, item)
+		if self.search == "" or string.find(item.name, self.search) then
+			table.insert(sortedItems, item)
+		end
 	end
 
 	local sortBy = self.sortProperty
@@ -71,6 +74,11 @@ function StorageChestNetworkController:refresh(force)
 	end
 
 	self.view.itemList:setItems(results)
+end
+
+function StorageChestNetworkController:onSearch(value)
+	self.search = value
+	self:refresh()
 end
 
 return StorageChestNetworkController

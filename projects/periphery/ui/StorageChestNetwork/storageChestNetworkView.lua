@@ -1,7 +1,18 @@
 local ColumnList = require("ui.ColumnList")
-local ComboBox = require("ui.ComboBox")
+local basalt = require("lib.basalt")
 
 return function(owningFrame, controller)
+	owningFrame
+		:addButton()
+		:setBackground(colors.blue)
+		:setForeground(colors.white)
+		:setText("Intake")
+		:setSize(8, 1)
+		:setPosition(1, 1)
+		:onClick(function()
+			controller:intake()
+		end)
+
 	owningFrame
 		:addButton()
 		:setText("Refresh")
@@ -13,15 +24,33 @@ return function(owningFrame, controller)
 			controller:refresh(true)
 		end)
 
-	owningFrame
+	local clearButton
+
+	local searchInput = owningFrame
+		:addInput()
+		:setBackground(colors.lightGray)
+		:setForeground(colors.black)
+		:setDefaultText("Search", colors.gray, colors.lightGray)
+		:setPosition(19, 1)
+		:setSize(20, 1)
+		:onChange(function(_, _, value)
+			if value == "" then
+				clearButton:setForeground(colors.gray)
+			else
+				clearButton:setForeground(colors.black)
+			end
+			controller:onSearch(value)
+		end)
+
+	clearButton = owningFrame
 		:addButton()
-		:setBackground(colors.blue)
-		:setForeground(colors.white)
-		:setText("Intake")
-		:setSize(8, 1)
-		:setPosition(1, 1)
+		:setPosition(39, 1)
+		:setSize(1, 1)
+		:setText("X")
+		:setBackground(colors.lightGray)
+		:setForeground(colors.gray)
 		:onClick(function()
-			controller:intake()
+			searchInput:setValue("")
 		end)
 
 	local mainContentFrame = owningFrame

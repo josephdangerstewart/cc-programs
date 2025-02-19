@@ -1,6 +1,7 @@
 local ControllerBase = require("mvc.ControllerBase")
 local IOChest = require("periphery.types.IOChest")
 local view = require("periphery.ui.StorageChestNetwork.storageChestNetworkView")
+local basalt = require("lib.basalt")
 local ItemDetailsSidebar = require("periphery.ui.StorageChestNetwork.ItemDetailsSidebarController")
 
 local StorageChestNetworkController = ControllerBase:extendWithView(view)
@@ -12,11 +13,12 @@ function StorageChestNetworkController:init(owningFrame, parent)
 		parent = parent,
 		device = parent.device,
 		periphery = parent.app.periphery,
+		sortProperty = "name"
 	})
 end
 
-function StorageChestNetworkController:onSelect(item)
-	self:openItemSidebar(item)
+function StorageChestNetworkController:onSelect(itemIndex)
+	self:openItemSidebar(self.sortedItems[itemIndex])
 end
 
 function StorageChestNetworkController:onShow()
@@ -30,7 +32,7 @@ end
 
 function StorageChestNetworkController:openItemSidebar(item)
 	self.view.itemDetailSidebar:removeChildren()
-	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self, self.device:list()[item])
+	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self, item)
 
 	self.view.itemDetailSidebar:show()
 	local sidebarWidth = self.view.itemDetailSidebar:getSize()
@@ -48,13 +50,24 @@ end
 function StorageChestNetworkController:refresh(force)
 	local items = self.device:list(force)
 
-	local results = {}
+	local sortedItems = {}
 	for i,item in pairs(items) do
-		results[i] = {
+		table.insert(sortedItems, item)
+	end
+
+	local sortBy = self.sortProperty
+	table.sort(sortedItems, function (a, b)
+		return a[sortBy] < b[sortBy]
+	end)
+
+	self.sortedItems = sortedItems
+	local results = {}
+	for i,item in pairs(sortedItems) do
+		table.insert(results, {
 			text = item.name,
 			subText = "x" .. item.count,
 			item = item,
-		}
+		})
 	end
 
 	self.view.itemList:setItems(results)

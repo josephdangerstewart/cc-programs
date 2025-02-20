@@ -52,8 +52,19 @@ function ItemDetailsSidebarController:submit()
 	local output = self:_getOutput()
 
 	self.device:giveItem(self.item.id, amount, output)
-	self.parent:closeItemSidebar()
 	self.parent:refresh()
+end
+
+function ItemDetailsSidebarController:takeStack()
+	local output = self:_getOutput()
+
+	if not output then
+		return
+	end
+
+	self.device:giveItem(self.item.id, math.min(64, self.item.count), output)
+	self.parent:refresh()
+	self:refresh()
 end
 
 function ItemDetailsSidebarController:_validateButton()

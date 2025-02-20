@@ -62,6 +62,17 @@ return function(owningFrame, controller)
 			controller:submit()
 		end)
 
+	owningFrame
+		:addButton()
+		:setText("Take stack")
+		:setBackground(colors.green)
+		:setForeground(colors.white)
+		:setSize("parent.w - 2", 1)
+		:setPosition(2, "parent.h - 2")
+		:onClick(function()
+			controller:takeStack()
+		end)
+
 	return {
 		nameLabel = nameLabel,
 		countLabel = countLabel,

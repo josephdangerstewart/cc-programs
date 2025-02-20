@@ -33,7 +33,7 @@ end
 
 function StorageChestNetworkController:openItemSidebar(item)
 	self.view.itemDetailSidebar:removeChildren()
-	ItemDetailsSidebar:new(self.view.itemDetailSidebar, self, item)
+	self.itemDetailsSidebarController = ItemDetailsSidebar:new(self.view.itemDetailSidebar, self, item)
 
 	self.view.itemDetailSidebar:show()
 	local sidebarWidth = self.view.itemDetailSidebar:getSize()
@@ -45,6 +45,11 @@ function StorageChestNetworkController:intake()
 
 	for i, chest in pairs(ioChests) do
 		chest.virtualPeripheral:intake(self.device)
+	end
+
+	self:refresh()
+	if self.itemDetailsSidebarController then
+		self.itemDetailsSidebarController:refresh()
 	end
 end
 

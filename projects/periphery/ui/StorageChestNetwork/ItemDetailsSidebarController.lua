@@ -53,6 +53,7 @@ function ItemDetailsSidebarController:submit()
 
 	self.device:giveItem(self.item.id, amount, output)
 	self.parent:closeItemSidebar()
+	self.parent:refresh()
 end
 
 function ItemDetailsSidebarController:_validateButton()

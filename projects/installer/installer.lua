@@ -17,6 +17,27 @@ local project = positionalArgs[1]
 local repo = "cc-programs"
 local owner = "josephdangerstewart"
 
+local pat
+if fs.exists(".gh-auth") then
+	local file = fs.open(".gh-auth", "r")
+	pat = file.readAll()
+	file.close()
+else
+	print("Enter GitHub access token (or leave empty for unauthed)")
+	print("Note: Access token does not need permissions, it's only to avoid rate limiting")
+	pat = read()
+
+	if pat ~= "" then
+		print("Save access token for future use (Y/N)? Not recommended on public servers")
+		local response = string.lower(read())
+		if response == "y" or response == "yes" then
+			local file = fs.open(".gh-auth", "w")
+			file.write(pat)
+			file.close()
+		end
+	end
+end
+
 local function repoBaseUrl()
 	return "https://api.github.com/repos/" .. owner .. "/" .. repo
 end
@@ -26,7 +47,10 @@ local function rawContentBaseUrl()
 end
 
 local function fetch(url)
-	local request, err, failedResponse = http.get(url)
+	local headers = pat and pat ~= "" and {
+		Authorization = "Bearer " .. pat
+	} or nil
+	local request, err, failedResponse = http.get(url, headers)
 	if err then
 		local code = failedResponse.getResponseCode()
 		failedResponse.close()
@@ -91,7 +115,7 @@ local function readLocalConfig(projectName)
 	local file = fs.open(projectName .. "/config.json", "r")
 	local contents = file.readAll()
 	file.close()
-	return contents
+	return textutils.unserialiseJSON(contents)
 end
 
 local processedProjects = {}
@@ -162,8 +186,7 @@ if remoteHasAnyChanges or (project and not fs.exists(project)) then
 	local file = fs.open("startup.lua", "w")
 	file.write(startupContents)
 	file.close()
-elseif not CCPROGRAMS_installer_message_has_displayed then
-	CCPROGRAMS_installer_message_has_displayed = true
+else
 	print("Installer will not run, everything is up to date")
 	print("Use --force to force complete reinstall")
 end
